@@ -7,82 +7,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Onest:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --navy: #0B1D35;
-    --navy-mid: #132744;
-    --navy-light: #1B3459;
-    --ice: #E8F4FD;
-    --ice-dark: #C5DFF5;
-    --accent: #0EA5E9;
-    --accent-bright: #38BDF8;
-    --gold: #F59E0B;
-    --green: #10B981;
-    --red: #EF4444;
-    --text: #F0F7FF;
-    --text-muted: #94B8D4;
+    --navy: #0B1D35; --navy-mid: #132744; --navy-light: #1B3459;
+    --accent: #0EA5E9; --accent-bright: #38BDF8;
+    --gold: #F59E0B; --green: #10B981; --red: #EF4444;
+    --text: #F0F7FF; --text-muted: #94B8D4;
     --border: rgba(14,165,233,0.18);
   }
-
-  body {
-    font-family: 'Onest', sans-serif;
-    background: var(--navy);
-    color: var(--text);
-    min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.12) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(14,165,233,0.07) 0%, transparent 60%);
-  }
-
+  body { font-family: 'Onest', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh;
+    background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(14,165,233,0.07) 0%, transparent 60%); }
   .page { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
-
-  /* Header */
   .header { text-align: center; margin-bottom: 48px; }
-  .company-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    border: 0.5px solid var(--accent);
-    padding: 6px 16px; border-radius: 40px;
-    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent-bright); margin-bottom: 24px;
-    background: rgba(14,165,233,0.07);
-  }
-  .fish-icon { font-size: 14px; }
-  .header h1 {
-    font-family: 'Unbounded', sans-serif;
-    font-size: clamp(22px, 5vw, 34px);
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin-bottom: 6px;
-  }
+  .company-tag { display: inline-flex; align-items: center; gap: 8px; border: 0.5px solid var(--accent);
+    padding: 6px 16px; border-radius: 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-bright); margin-bottom: 24px; background: rgba(14,165,233,0.07); }
+  .header h1 { font-family: 'Unbounded', sans-serif; font-size: clamp(20px, 5vw, 32px); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.02em; color: var(--text); margin-bottom: 6px; }
   .header h1 span { color: var(--accent-bright); }
-  .header-sub {
-    font-size: 13px; color: var(--text-muted);
-    margin-top: 10px; letter-spacing: 0.04em;
-  }
-
-  .manager-card {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--navy-mid);
-    border: 0.5px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 20px;
-    margin: 24px auto 0;
-    max-width: 420px;
-  }
-  .manager-avatar {
-    width: 46px; height: 46px; border-radius: 50%;
+  .header-sub { font-size: 13px; color: var(--text-muted); margin-top: 10px; letter-spacing: 0.04em; }
+  .manager-card { display: flex; align-items: center; gap: 14px; background: var(--navy-mid);
+    border: 0.5px solid var(--border); border-radius: 14px; padding: 14px 20px; margin: 24px auto 0; max-width: 420px; }
+  .manager-avatar { width: 46px; height: 46px; border-radius: 50%;
     background: linear-gradient(135deg, #0EA5E9, #0369A1);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700;
-    color: #fff; flex-shrink: 0;
-  }
-  .manager-info { text-align: left; }
+    font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
   .manager-name { font-size: 15px; font-weight: 500; color: var(--text); }
   .manager-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  /* Progress */
+  .deco-line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto 32px; }
   .progress-wrap { margin-bottom: 32px; }
   .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .progress-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
@@ -90,198 +42,77 @@
   .progress-track { height: 3px; background: var(--navy-light); border-radius: 2px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #0EA5E9, #38BDF8); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
 
-  /* Question card */
-  .q-card {
-    background: var(--navy-mid);
-    border: 0.5px solid var(--border);
-    border-radius: 18px;
-    padding: 28px 28px 24px;
-    margin-bottom: 16px;
-    transition: border-color 0.3s;
-    animation: fadeUp 0.35s ease both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .client-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+  .badge-dacha { background: rgba(14,165,233,0.12); color: var(--accent-bright); border: 0.5px solid rgba(14,165,233,0.25); }
+  .badge-atmo { background: rgba(16,185,129,0.1); color: #34D399; border: 0.5px solid rgba(16,185,129,0.25); }
+
+  .q-card { background: var(--navy-mid); border: 0.5px solid var(--border); border-radius: 18px;
+    padding: 28px 28px 24px; margin-bottom: 16px; transition: border-color 0.3s; animation: fadeUp 0.35s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   .q-card.correct { border-color: rgba(16,185,129,0.5); }
   .q-card.wrong { border-color: rgba(239,68,68,0.4); }
-
   .q-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-  .q-num-badge {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 11px; font-weight: 700;
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    background: rgba(14,165,233,0.15);
-    color: var(--accent-bright);
-    border: 0.5px solid rgba(14,165,233,0.3);
-    margin-top: 2px;
-  }
+  .q-num-badge { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 700;
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; background: rgba(14,165,233,0.15); color: var(--accent-bright);
+    border: 0.5px solid rgba(14,165,233,0.3); margin-top: 2px; }
   .q-text { font-size: 16px; font-weight: 500; line-height: 1.55; color: var(--text); }
-
-  /* Options */
   .options { display: flex; flex-direction: column; gap: 10px; }
-  .opt {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 13px 16px;
-    border-radius: 12px;
-    border: 0.5px solid rgba(255,255,255,0.08);
-    cursor: pointer;
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; border-radius: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08); cursor: pointer;
     transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    background: rgba(255,255,255,0.03);
-    user-select: none;
-  }
-  .opt:hover:not(.disabled) {
-    background: rgba(14,165,233,0.08);
-    border-color: rgba(14,165,233,0.3);
-    transform: translateX(2px);
-  }
+    background: rgba(255,255,255,0.03); user-select: none; }
+  .opt:hover:not(.disabled) { background: rgba(14,165,233,0.08); border-color: rgba(14,165,233,0.3); transform: translateX(2px); }
   .opt:active:not(.disabled) { transform: scale(0.99); }
   .opt.disabled { cursor: default; }
-  .opt.chosen-correct {
-    background: rgba(16,185,129,0.1);
-    border-color: rgba(16,185,129,0.4);
-  }
-  .opt.chosen-wrong {
-    background: rgba(239,68,68,0.1);
-    border-color: rgba(239,68,68,0.35);
-  }
-  .opt.reveal-correct {
-    background: rgba(16,185,129,0.06);
-    border-color: rgba(16,185,129,0.25);
-  }
-  .opt-letter {
-    width: 26px; height: 26px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; font-family: 'Unbounded', sans-serif;
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.06);
-    color: var(--text-muted);
-    border: 0.5px solid rgba(255,255,255,0.1);
-    transition: all 0.2s;
-  }
+  .opt.chosen-correct { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); }
+  .opt.chosen-wrong { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.35); }
+  .opt.reveal-correct { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.25); }
+  .opt-letter { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; font-family: 'Unbounded', sans-serif; flex-shrink: 0;
+    background: rgba(255,255,255,0.06); color: var(--text-muted); border: 0.5px solid rgba(255,255,255,0.1); transition: all 0.2s; }
   .opt.chosen-correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
   .opt.chosen-wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
   .opt.reveal-correct .opt-letter { background: rgba(16,185,129,0.25); color: var(--green); border-color: var(--green); }
   .opt-text { font-size: 14px; line-height: 1.45; color: var(--text); padding-top: 4px; }
-
-  /* Feedback */
-  .feedback {
-    margin-top: 14px; padding: 12px 16px;
-    border-radius: 10px; font-size: 13px; line-height: 1.6;
-    display: none;
-  }
+  .feedback { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; display: none; }
   .feedback.show { display: block; animation: fadeUp 0.25s ease; }
   .feedback.ok { background: rgba(16,185,129,0.1); color: #6EE7B7; border-left: 2px solid var(--green); }
   .feedback.fail { background: rgba(239,68,68,0.08); color: #FCA5A5; border-left: 2px solid var(--red); }
-
-  /* Score screen */
-  .score-screen {
-    display: none;
-    background: var(--navy-mid);
-    border: 0.5px solid var(--border);
-    border-radius: 22px;
-    padding: 40px 32px;
-    text-align: center;
-    animation: fadeUp 0.4s ease;
-  }
+  .score-screen { display: none; background: var(--navy-mid); border: 0.5px solid var(--border);
+    border-radius: 22px; padding: 40px 32px; text-align: center; animation: fadeUp 0.4s ease; }
   .score-screen.show { display: block; }
-
-  .score-label-top {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
-    color: var(--text-muted); margin-bottom: 20px;
-  }
-  .score-circle {
-    width: 110px; height: 110px; border-radius: 50%;
-    margin: 0 auto 20px;
+  .score-label-top { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 20px; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 20px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 2px solid var(--accent);
-    background: rgba(14,165,233,0.07);
-    position: relative;
-  }
+    border: 2px solid var(--accent); background: rgba(14,165,233,0.07); }
   .score-circle.great { border-color: var(--green); background: rgba(16,185,129,0.08); }
   .score-circle.mid { border-color: var(--gold); background: rgba(245,158,11,0.07); }
   .score-circle.low { border-color: var(--red); background: rgba(239,68,68,0.07); }
-
-  .score-big {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 36px; font-weight: 700; line-height: 1;
-    color: var(--text);
-  }
+  .score-big { font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; color: var(--text); }
   .score-of { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  .score-title {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 18px; font-weight: 600;
-    color: var(--text); margin-bottom: 8px;
-  }
-  .score-msg { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 400px; margin: 0 auto; }
-
-  .score-divider {
-    height: 0.5px; background: var(--border);
-    margin: 24px 0;
-  }
-
-  .score-meta {
-    font-size: 13px; color: var(--text-muted); line-height: 1.8;
-  }
+  .score-title { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .score-msg { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 440px; margin: 0 auto; }
+  .score-divider { height: 0.5px; background: var(--border); margin: 24px 0; }
+  .score-meta { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
   .score-meta strong { color: var(--accent-bright); font-weight: 500; }
-
-  .screenshot-note {
-    margin-top: 20px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    background: rgba(245,158,11,0.08);
-    border: 0.5px solid rgba(245,158,11,0.3);
-    font-size: 13px;
-    color: #FCD34D;
-    line-height: 1.6;
-  }
-  .screenshot-note .note-icon { font-size: 16px; margin-bottom: 4px; }
-
-  .reset-btn {
-    margin-top: 24px;
-    padding: 12px 28px;
-    border-radius: 40px;
-    border: 0.5px solid var(--border);
-    background: transparent;
-    color: var(--text-muted);
-    font-family: 'Onest', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-  }
+  .screenshot-note { margin-top: 20px; padding: 14px 18px; border-radius: 12px;
+    background: rgba(245,158,11,0.08); border: 0.5px solid rgba(245,158,11,0.3);
+    font-size: 13px; color: #FCD34D; line-height: 1.6; }
+  .reset-btn { margin-top: 24px; padding: 12px 28px; border-radius: 40px; border: 0.5px solid var(--border);
+    background: transparent; color: var(--text-muted); font-family: 'Onest', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.2s; }
   .reset-btn:hover { background: rgba(14,165,233,0.08); color: var(--text); border-color: var(--accent); }
-
-  /* Decorative line */
-  .deco-line {
-    width: 60px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    margin: 0 auto 32px;
-  }
-
-  @media (max-width: 500px) {
-    .page { padding: 28px 14px 60px; }
-    .q-card { padding: 20px 16px 18px; }
-    .q-text { font-size: 15px; }
-    .score-screen { padding: 28px 18px; }
-  }
+  @media (max-width: 500px) { .page { padding: 28px 14px 60px; } .q-card { padding: 20px 16px 18px; } .q-text { font-size: 15px; } .score-screen { padding: 28px 18px; } }
 </style>
 </head>
 <body>
 <div class="page">
-
   <div class="header">
-    <div class="company-tag">
-      <span class="fish-icon">🐟</span>
-      АО «ФИШ ТУ БИЗНЕС»
-    </div>
+    <div class="company-tag">🐟 АО «ФИШ ТУ БИЗНЕС»</div>
     <h1>Аттестация<br><span>менеджера</span> отдела продаж</h1>
-    <p class="header-sub">Тема: знание клиента</p>
+    <p class="header-sub">Тема: знание клиентов</p>
     <div class="manager-card">
       <div class="manager-avatar">ЕМ</div>
       <div class="manager-info">
@@ -290,25 +121,20 @@
       </div>
     </div>
   </div>
-
   <div class="deco-line"></div>
-
-  <div class="progress-wrap" id="progress-wrap">
+  <div class="progress-wrap">
     <div class="progress-meta">
       <span class="progress-label">Прогресс</span>
-      <span class="progress-counter" id="progress-counter">0 / 5</span>
+      <span class="progress-counter" id="progress-counter">0 / 10</span>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
-
   <div id="questions-container"></div>
   <div class="score-screen" id="score-screen">
     <div class="score-label-top">Результат аттестации</div>
     <div class="score-circle" id="score-circle">
       <div class="score-big" id="score-big">—</div>
-      <div class="score-of">из 5</div>
+      <div class="score-of" id="score-sub"></div>
     </div>
     <div class="score-title" id="score-title"></div>
     <div class="score-msg" id="score-msg-text"></div>
@@ -318,84 +144,156 @@
       <strong>Дата и время:</strong> <span id="score-datetime"></span>
     </div>
     <div class="screenshot-note">
-      <div class="note-icon">📸</div>
-      Сделайте скриншот этого экрана и отправьте руководителю для фиксации результата аттестации.
+      📸 Сделайте скриншот этого экрана и отправьте руководителю для фиксации результата аттестации.
     </div>
     <button class="reset-btn" onclick="resetAll()">Пройти заново</button>
   </div>
-
 </div>
-
 <script>
 const questions = [
   {
-    num: 1,
     text: '«Дача» — это сеть или одиночное заведение? Сколько у них точек и в каком регионе они работают?',
-    options: [
-      'Одиночное кафе в Москве',
-      'Сеть из 5 точек в Подмосковье',
-      'Сеть из 12 кафе и кофеен в Истринском районе и соседних городах Подмосковья',
-      'Франшиза по всей России'
-    ],
+    options: ['Одиночное кафе в Москве', 'Сеть из 5 точек в Подмосковье', 'Сеть из 12 кафе и кофеен в Истринском районе и соседних городах Подмосковья', 'Франшиза по всей России'],
     correct: 2,
     ok: 'Верно. 12 точек в г. Истра и районе, плюс Звенигород, Волоколамск и Зеленоград. Стабильный сетевой клиент с регулярными объёмами закупок.',
     fail: 'Неверно. Это сеть из 12 точек, базируется в Истре и Истринском районе Подмосковья, также присутствует в Звенигороде, Волоколамске и Зеленограде.'
   },
   {
-    num: 2,
+    text: 'Что такое «Япоша» и в каком городе работает?',
+    options: ['Ресторан японской кухни с доставкой, работает в Королёве и Щелково', 'Сеть суши-баров в Москве и Санкт-Петербурге', 'Федеральная сеть доставки суши', 'Сеть фастфуда по Подмосковью и с филиалом в Сочи'],
+    correct: 0,
+    ok: 'Верно. «Япоша» — ресторан японской кухни с доставкой в Королёве и Щелково. Своё приложение, бонусная система, широкое меню от суши до бургеров.',
+    fail: 'Неверно. «Япоша» — ресторан с доставкой, работает в Королёве и Щелково Подмосковья. Не федеральная сеть и не фастфуд.'
+  },
+  {
+    text: 'Чем занимается ООО «Атмосфера» и кто является их конечными клиентами?',
+    options: ['Сеть рыбных ресторанов в Москве', 'Розничная сеть рыбных магазинов с товарами паназиатской кухни', 'Производитель рыбного филе и соусов', 'Оптовый поставщик морепродуктов и ингредиентов для суши'],
+    correct: 3,
+    ok: 'Верно. ООО «Атмосфера» — оптовый поставщик: торгует рыбой, морепродуктами и ингредиентами для суши, поставляет в рестораны. Один клиент — много конечных точек.',
+    fail: 'Неверно. ООО «Атмосфера» — оптовый поставщик рыбы и ингредиентов для суши-ресторанов и кафе. Они сами перепродают продукцию дальше в рестораны.'
+  },
+  {
+    text: 'Чем занимается ООО «Космос» и под каким брендом работает?',
+    options: ['Сеть суши-ресторанов в Санкт-Петербурге', 'Производитель ингредиентов для японской кухни, бренд OSHI', 'Оптовый импортёр продуктов для японской кухни', 'Производитель соусов и дистрибьютор рыбного филе'],
+    correct: 1,
+    ok: 'Верно. ООО «Космос» — производитель и дистрибьютор ингредиентов для японской и европейской кухни под брендом OSHI. Более 15 лет на рынке, свыше 1200 SKU.',
+    fail: 'Неверно. ООО «Космос» — производитель и дистрибьютор ингредиентов для японской кухни под брендом OSHI. Не просто импортёр, а собственное производство.'
+  },
+  {
+    text: 'Какие рыбные позиции есть в горячем меню «Япоши»? Выберите наиболее полный ответ.',
+    options: ['Только лосось на гриле', 'Семга, форель и судак в разных соусах, сибас и дорадо', 'Лосось на подушке из риса том ям, морской окунь изуми тай, угорь на рисе', 'Тунец и дорадо запечённые, мидии, устрицы и морской коктейль'],
+    correct: 2,
+    ok: 'Верно. В горячем меню: лосось на подушке из риса том ям, морской окунь изуми тай (две подачи) и угорь на рисе — три рыбных позиции, каждая из которых требует стабильного сырья.',
+    fail: 'Неверно. В горячем меню «Япоши»: лосось на подушке из риса том ям, морской окунь изуми тай и угорь на рисе.'
+  },
+  {
+    text: 'Что производит и продаёт ООО «Космос»? Выберите наиболее полный ответ.',
+    options: ['Икру масаго и тобико, соусы, темпурную муку, васаби, водоросли чука, рисовый уксус', 'Суши, роллы и готовые блюда на вынос', 'Только икру масаго и тобико', 'Замороженную рыбу, морепродукты и нори, темпурную муку, рисовый уксус'],
+    correct: 0,
+    ok: 'Верно. Полный ассортимент OSHI: икра масаго и тобико, линейка соусов (терияки, унаги, кимчи, чили, соевый), темпурная мука, васаби, водоросли чука и рисовый уксус.',
+    fail: 'Неверно. ООО «Космос» производит икру масаго и тобико, соусы, темпурную муку, васаби, водоросли чука и рисовый уксус — всё для японской кухни.'
+  },
+  {
+    text: 'В какую цену «Филадельфия» в ресторане «Япоша»?',
+    options: ['400–600 руб.', '900–1000 руб.', '1000–1100 руб.', '800–900 руб.'],
+    correct: 3,
+    ok: 'Верно. Филадельфия стоит 790–810 руб. в зависимости от состава. Знание ценового уровня клиента помогает понимать его маржинальность и аргументировать цену поставки.',
+    fail: 'Неверно. Филадельфия в «Япоше» стоит 790–810 руб. — это диапазон 800–900 руб. Важно знать ценовой уровень клиента.'
+  },
+  {
+    text: 'Торгует ли ООО «Атмосфера» белорусским филе?',
+    options: ['Да, и у нас не получится конкурировать', 'Да, и мы можем предлагать своё, когда конъюнктура рынка положительная', 'Нет, берут только наше филе форели', 'Нет, торгуют только лососем'],
+    correct: 1,
+    ok: 'Верно. Клиент работает с белорусским филе, но это не повод отступать — нужно отслеживать рыночную конъюнктуру и предлагать наше филе в нужный момент.',
+    fail: 'Неверно. ООО «Атмосфера» торгует белорусским филе, но мы можем конкурировать и предлагать своё, когда конъюнктура рынка это позволяет.'
+  },
+  {
+    text: 'В каких городах у ООО «Космос» есть филиалы в России?',
+    options: ['Только Москва и Санкт-Петербург', 'Москва, Казань, Екатеринбург, Новосибирск, Норильск', 'Краснодар, Ставрополь, Симферополь, Ростов-на-Дону, Москва', 'Ростов-на-Дону и Краснодар, Санкт-Петербург, Сочи, Калининград'],
+    correct: 2,
+    ok: 'Верно. 5 филиалов: Краснодар, Ставрополь, Симферополь, Ростов-на-Дону и Москва. Плюс дистрибьюторы в Казахстане — клиент работает на федеральном уровне.',
+    fail: 'Неверно. Филиалы ООО «Космос» в России: Краснодар, Ставрополь, Симферополь, Ростов-на-Дону и Москва.'
+  },
+  {
+    text: 'Под какими юридическими лицами работает сеть «Япоша»?',
+    options: ['ООО «Япоша групп», НП Королев и ИП Павлова Елена Владиславовна', 'ООО «Япоша групп» — единственное юрлицо', 'ИП Павлова Елена Владиславовна и ООО «Япония»', 'АО «Япоша» и ИП Королёв'],
+    correct: 0,
+    ok: 'Верно. Три юрлица: ООО «Япоша групп», НП Королев и ИП Павлова Елена Владиславовна. При звонке от любого из них нужно сразу узнать клиента.',
+    fail: 'Неверно. «Япоша» работает через три юрлица: ООО «Япоша групп», НП Королев и ИП Павлова Елена Владиславовна.'
+  },
+  {
     text: 'Какие рыбные блюда и морепродукты есть в меню «Дачи»? Выберите наиболее полный ответ.',
-    options: [
-      'Только рыба-гриль и суши',
-      'Судак, скумбрия, котлеты из трёх видов рыб (треска/горбуша/щука), драники с лососем, цезарь с тигровыми креветками',
-      'Семга на пару и тунец с овощами',
-      'Форель и дорадо — основные позиции меню'
-    ],
+    options: ['Только рыба-гриль и суши', 'Семга на пару и тунец с овощами, цезарь с тигровыми креветками', 'Форель и дорадо, черная треска', 'Судак, скумбрия, котлеты из трёх видов рыб (треска/горбуша/щука), драники с лососем'],
+    correct: 3,
+    ok: 'Верно. В меню есть судак, скумбрия, котлеты из трёх видов рыб (треска, горбуша, щука) и драники с лососем — прямые точки входа для нашего ассортимента.',
+    fail: 'Неверно. В меню «Дачи»: филе судака, скумбрия, котлеты из трёх рыб (треска, горбуша, щука) и драники с лососем.'
+  },
+  {
+    text: 'ООО «Космос» — производитель суши-ингредиентов. Что из нашего ассортимента логично предложить этому клиенту?',
+    options: ['Ничего — они сами производители, наша продукция им не нужна', 'Рыбное филе (лосось, форель слабой соли) для перепродажи в рестораны', 'Только форель слабой соли', 'Бакалею и растительные масла'],
     correct: 1,
-    ok: 'Верно. В меню есть судак, скумбрия, котлеты из трески/горбуши/щуки, драники с лососем и цезарь с тигровыми креветками — прямые точки входа для нашего ассортимента.',
-    fail: 'Неверно. В меню: филе судака, скумбрия, котлеты из трёх рыб (треска, горбуша, щука), драники с лососем, цезарь с тигровыми креветками и креветки панко.'
+    ok: 'Верно. ООО «Космос» поставляет в рестораны и суши-бары — им нужно рыбное филе для перепродажи своим клиентам. Лосось и форель слабой соли — приоритет.',
+    fail: 'Неверно. ООО «Космос» поставляет в рестораны и суши-бары. Логично предложить рыбное филе — лосось и форель слабой соли — для перепродажи их клиентам.'
   },
   {
-    num: 3,
-    text: 'Какое рыбное филе из нашего ассортимента наиболее приоритетно предложить «Даче» в первую очередь?',
-    options: [
-      'Минтай и пангасиус — они дешевле всего',
-      'Судак, треска, лосось, скумбрия и горбуша — эти виды уже есть в их меню',
-      'Только тунец и дорадо — они подходят для авторской кухни',
-      'Морской окунь и карп'
-    ],
+    text: 'Сеть «Дача» работает через несколько юридических лиц. Какие из перечисленных ИП относятся к этой сети?',
+    options: ['ИП Левчук Светлана Анатольевна', 'ИП Матвеева Мария Сергеевна', 'Все три относятся к сети «Дача»', 'ИП Крук Екатерина Александровна'],
+    correct: 2,
+    ok: 'Верно. Все три ИП — Левчук, Матвеева и Крук — это юрлица сети «Дача». Менеджер должен знать каждое из них, чтобы мгновенно узнавать клиента в документах и при звонке.',
+    fail: 'Неверно. Все три ИП — Левчук Светлана Анатольевна, Матвеева Мария Сергеевна и Крук Екатерина Александровна — относятся к сети «Дача». Важно знать все три.'
+  },
+  {
+    text: '«Япоша» — ресторан с суши, роллами, горячим, пиццей и доставкой. Как это влияет на потенциал закупок рыбы?',
+    options: ['Высокий потенциал: лосось, тунец и морской окунь используются сразу в нескольких разделах меню — роллы, суши, горячее, салаты-поке', 'Небольшой потенциал — это просто суши-бар', 'Потенциал средний, ассортимент не наш', 'Рыба в меню — вторичная позиция, приоритет на морепродуктах'],
+    correct: 0,
+    ok: 'Верно. Лосось идёт в роллы, горячее и поке, тунец — в суши и поке, морской окунь — в горячее и роллы. Широкое меню = стабильный и объёмный спрос на рыбное сырьё.',
+    fail: 'Неверно. Лосось, тунец и морской окунь присутствуют сразу в нескольких разделах меню — это высокий и стабильный потенциал закупок рыбного сырья.'
+  },
+  {
+    text: 'ООО «Атмосфера» — оптовый перепродавец. Что это означает для нас с точки зрения объёма и стратегии работы?',
+    options: ['Крупный клиент, работаем по стандартному прайсу без торгов', 'Они конкурент, нужно держать дистанцию', 'Оптовик — значит цена единственный критерий', 'Один клиент = много конечных потребителей: рост продаж у них означает рост нашей поставки, поэтому важно помогать им продавать нашу продукцию дальше'],
+    correct: 3,
+    ok: 'Верно. Оптовый клиент — мультипликатор: его рост = наш рост. Задача менеджера — помогать клиенту продавать нашу рыбу дальше, а не только отгружать по заявке.',
+    fail: 'Неверно. Оптовик — стратегический клиент. Нужно помогать ему продавать нашу продукцию его ресторанам, а не просто ждать заявок.'
+  },
+  {
+    text: 'ООО «Космос» работает с HoReCa и имеет более 4000 клиентов по России и СНГ. Что это означает для нашей стратегии работы с ними?',
+    options: ['Средний клиент, стандартный подход', 'Крупный дистрибьютор — особое внимание: рост их продаж умножает наши поставки, нужны партнёрские отношения', 'Крупный клиент, но рыба не в приоритете', 'Конкурент по рыбному направлению, держим дистанцию'],
     correct: 1,
-    ok: 'Верно. Предлагаем то, что уже в рецептурах клиента: судак, треска, лосось, скумбрия, горбуша — это работает на их кухне прямо сейчас и не требует доработки меню.',
-    fail: 'Неверно. Нужно опираться на меню клиента: судак, треска, лосось, скумбрия и горбуша — именно эти виды присутствуют в блюдах «Дачи».'
+    ok: 'Верно. Более 4000 клиентов в HoReCa — мощный канал сбыта. Наша задача: выстроить партнёрские отношения и помочь им продавать наше филе своим ресторанам.',
+    fail: 'Неверно. ООО «Космос» — крупный дистрибьютор с федеральным охватом. Это стратегический клиент, требующий особого внимания и партнёрского подхода.'
   },
   {
-    num: 4,
-    text: 'Входящий звонок. Клиент представляется: «ИП Крук Екатерина Александровна». Что это за клиент?',
-    options: [
-      'Новый клиент, ранее не встречался',
-      'Поставщик рыбы — наш конкурент',
-      'Это юридическое лицо сети кафе «Дача»',
-      'Частное лицо, нужно переключить на отдел розницы'
-    ],
+    text: 'В меню «Дачи» есть раздел «Постное». Как грамотно использовать это в нашей работе с клиентом?',
+    options: ['Постное меню не касается поставок рыбы', 'Предложить филе куриного бедра', 'До начала поста предложить увеличить объём морепродуктов', 'Отправить прайс на растительные масла, овощи и свежую зелень'],
     correct: 2,
-    ok: 'Верно. ИП Крук Екатерина Александровна — юрлицо сети «Дача». Менеджер должен мгновенно связывать юридическое название с брендом, чтобы не потерять клиента.',
-    fail: 'Неверно. ИП Крук Екатерина Александровна — это юридическое лицо сети кафе «Дача». Нужно знать это наизусть, чтобы мгновенно реагировать при входящем звонке.'
+    ok: 'Верно. В период постов спрос на рыбу и морепродукты резко растёт. Грамотный менеджер предупреждает клиента заранее и предлагает увеличить объём поставки.',
+    fail: 'Неверно. Постное меню — прямой сигнал к росту поставки рыбы и морепродуктов. Нужно заблаговременно предлагать увеличение объёма под этот сезон.'
   },
   {
-    num: 5,
-    text: 'В меню «Дачи» есть раздел «Постное». Как грамотно использовать это в работе с клиентом?',
-    options: [
-      'Никак — постное меню не касается поставок рыбы',
-      'Предложить убрать мясные блюда из поставки',
-      'Заблаговременно до начала поста предложить увеличить объём рыбного филе и расширить ассортимент для постных позиций',
-      'Отправить прайс на растительные масла и овощи'
-    ],
-    correct: 2,
-    ok: 'Верно. В период постов спрос на рыбу резко растёт. Грамотный менеджер предупреждает клиента заранее, предлагает увеличить объём и новые виды рыбного филе под сезон.',
-    fail: 'Неверно. Постное меню — прямой сигнал к росту поставки рыбы. Нужно заблаговременно предлагать увеличить объём и расширить ассортимент под этот сезон.'
+    text: 'Где находится склад клиента ООО «Атмосфера»?',
+    options: ['Мытищи', 'Королёв', 'Капотня', 'Егорьевское шоссе'],
+    correct: 0,
+    ok: 'Верно. Склад самовывоза — Мытищи, Осташковское шоссе. Важно знать для логистики и понимания географии работы клиента.',
+    fail: 'Неверно. Склад ООО «Атмосфера» находится в Мытищах на Осташковском шоссе.'
+  },
+  {
+    text: 'Глядя на ассортимент клиента (суши-ингредиенты, морепродукты, рыбное филе), что ещё из нашей продукции логично предложить ООО «Атмосфера»?',
+    options: ['Ничего, они всем довольны и расширение не нужно', 'Только мясо и птицу — у них не хватает этого направления', 'Бакалею, соусы, нори и салат чука', 'Слабосолёное филе лосося, а также другие виды готового рыбного филе под суши и рестораны'],
+    correct: 3,
+    ok: 'Верно. Раз они уже берут слабосолёное филе форели и продают суши-ингредиенты — логично предложить филе лосося слабой соли и другие виды. Прямое расширение текущей корзины.',
+    fail: 'Неверно. Логичное развитие — слабосолёное филе лосося и другие виды готового рыбного филе под суши и рестораны.'
+  },
+  {
+    text: 'Какое рыбное филе из нашего ассортимента наиболее приоритетно предложить кафе «Дача» в первую очередь?',
+    options: ['Минтай и пангасиус', 'Судак, треска, лосось, скумбрия и горбуша — эти виды уже есть в их меню', 'Тунец и дорадо, фарш лососевый — они подходят для авторской кухни', 'Морской окунь, филе форели копченое, брюшки'],
+    correct: 1,
+    ok: 'Верно. Предлагаем то, что уже в рецептурах: судак, треска, лосось, скумбрия, горбуша — всё это работает на их кухне прямо сейчас.',
+    fail: 'Неверно. Нужно опираться на меню клиента: судак, треска, лосось, скумбрия и горбуша — именно эти виды уже присутствуют в их блюдах.'
   }
 ];
 
-const LETTERS = ['А', 'Б', 'В', 'Г'];
+const LETTERS = ['А','Б','В','Г'];
 let answered = new Array(questions.length).fill(false);
 let correct_count = 0;
 
@@ -404,25 +302,20 @@ function render() {
   container.innerHTML = '';
   questions.forEach((q, qi) => {
     const card = document.createElement('div');
-    card.className = 'q-card';
-    card.id = 'qcard-' + qi;
-    card.style.animationDelay = (qi * 0.06) + 's';
-
+    card.className = 'q-card'; card.id = 'qcard-' + qi;
+    card.style.animationDelay = (qi * 0.05) + 's';
     const optsHtml = q.options.map((o, oi) => `
       <div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi}, ${oi})">
         <div class="opt-letter">${LETTERS[oi]}</div>
         <div class="opt-text">${o}</div>
-      </div>
-    `).join('');
-
+      </div>`).join('');
     card.innerHTML = `
       <div class="q-top">
-        <div class="q-num-badge">${q.num}</div>
+        <div class="q-num-badge">${qi + 1}</div>
         <p class="q-text">${q.text}</p>
       </div>
       <div class="options">${optsHtml}</div>
-      <div class="feedback" id="fb-${qi}"></div>
-    `;
+      <div class="feedback" id="fb-${qi}"></div>`;
     container.appendChild(card);
   });
   updateProgress();
@@ -434,68 +327,54 @@ function choose(qi, oi) {
   const q = questions[qi];
   const isCorrect = oi === q.correct;
   if (isCorrect) correct_count++;
-
-  const card = document.getElementById('qcard-' + qi);
-  card.classList.add(isCorrect ? 'correct' : 'wrong');
-
+  document.getElementById('qcard-' + qi).classList.add(isCorrect ? 'correct' : 'wrong');
   for (let i = 0; i < q.options.length; i++) {
     const el = document.getElementById('opt-' + qi + '-' + i);
     el.classList.add('disabled');
     if (i === oi) el.classList.add(isCorrect ? 'chosen-correct' : 'chosen-wrong');
     else if (i === q.correct && !isCorrect) el.classList.add('reveal-correct');
   }
-
   const fb = document.getElementById('fb-' + qi);
   fb.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.ok : q.fail);
   fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'fail');
-
   updateProgress();
   if (answered.every(a => a)) setTimeout(showScore, 500);
 }
 
 function updateProgress() {
   const done = answered.filter(Boolean).length;
-  const total = questions.length;
-  document.getElementById('progress-counter').textContent = done + ' / ' + total;
-  document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-counter').textContent = done + ' / ' + questions.length;
+  document.getElementById('progress-fill').style.width = (done / questions.length * 100) + '%';
 }
 
 function showScore() {
   document.getElementById('score-screen').classList.add('show');
-  document.getElementById('score-big').textContent = correct_count;
-
+  const pct = Math.round(correct_count / questions.length * 100);
+  document.getElementById('score-big').textContent = pct + '%';
+  document.getElementById('score-sub').textContent = correct_count + ' из ' + questions.length + ' вопросов';
   const circle = document.getElementById('score-circle');
   const title = document.getElementById('score-title');
   const msg = document.getElementById('score-msg-text');
-
-  if (correct_count === 5) {
-    circle.classList.add('great');
-    title.textContent = 'Отлично — клиент изучен полностью';
-    msg.textContent = 'Менеджер знает специфику клиента, меню, юридическое лицо и умеет видеть возможности для продаж.';
-  } else if (correct_count >= 3) {
-    circle.classList.add('mid');
-    title.textContent = 'Хорошо, но есть пробелы';
-    msg.textContent = 'Рекомендуется повторить материал по клиенту перед следующим звонком. Особое внимание — вопросам с неверными ответами.';
+  if (pct >= 87) {
+    circle.classList.add('great'); title.textContent = 'Отлично — клиенты изучены полностью';
+    msg.textContent = 'Менеджер знает специфику всех клиентов, меню, юрлица, потенциал развития и стратегию работы.';
+  } else if (pct >= 60) {
+    circle.classList.add('mid'); title.textContent = 'Хорошо, но есть пробелы';
+    msg.textContent = 'Рекомендуется повторить материал по клиентам, уделив особое внимание вопросам с неверными ответами.';
   } else {
-    circle.classList.add('low');
-    title.textContent = 'Необходима дополнительная подготовка';
-    msg.textContent = 'Менеджеру следует изучить сайт и меню клиента, запомнить юридическое лицо и пройти аттестацию повторно.';
+    circle.classList.add('low'); title.textContent = 'Необходима дополнительная подготовка';
+    msg.textContent = 'Менеджеру следует изучить сайты клиентов, запомнить юрлица и пройти аттестацию повторно.';
   }
-
   const now = new Date();
-  const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-  document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', options);
-
+  document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
   document.getElementById('score-screen').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function resetAll() {
-  answered = new Array(questions.length).fill(false);
-  correct_count = 0;
+  answered = new Array(questions.length).fill(false); correct_count = 0;
   document.getElementById('score-screen').classList.remove('show');
   document.getElementById('score-circle').className = 'score-circle';
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render(); window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 render();
