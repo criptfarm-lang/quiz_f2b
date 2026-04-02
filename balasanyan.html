@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аттестация менеджера — ФИШ ТУ БИЗНЕС</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Onest:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1D35; --navy-mid: #132744; --navy-light: #1B3459;
+    --accent: #0EA5E9; --accent-bright: #38BDF8;
+    --gold: #F59E0B; --green: #10B981; --red: #EF4444;
+    --text: #F0F7FF; --text-muted: #94B8D4;
+    --border: rgba(14,165,233,0.18);
+  }
+  body { font-family: 'Onest', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh;
+    background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(14,165,233,0.07) 0%, transparent 60%); }
+  .page { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .header { text-align: center; margin-bottom: 48px; }
+  .company-tag { display: inline-flex; align-items: center; gap: 8px; border: 0.5px solid var(--accent);
+    padding: 6px 16px; border-radius: 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-bright); margin-bottom: 24px; background: rgba(14,165,233,0.07); }
+  .header h1 { font-family: 'Unbounded', sans-serif; font-size: clamp(20px, 5vw, 32px); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.02em; color: var(--text); margin-bottom: 6px; }
+  .header h1 span { color: var(--accent-bright); }
+  .header-sub { font-size: 13px; color: var(--text-muted); margin-top: 10px; letter-spacing: 0.04em; }
+  .manager-card { display: flex; align-items: center; gap: 14px; background: var(--navy-mid);
+    border: 0.5px solid var(--border); border-radius: 14px; padding: 14px 20px; margin: 24px auto 0; max-width: 420px; }
+  .manager-avatar { width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #0EA5E9, #0369A1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .manager-name { font-size: 15px; font-weight: 500; color: var(--text); }
+  .manager-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .deco-line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto 32px; }
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .progress-counter { font-family: 'Unbounded', sans-serif; font-size: 13px; color: var(--accent-bright); }
+  .progress-track { height: 3px; background: var(--navy-light); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #0EA5E9, #38BDF8); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .q-card { background: var(--navy-mid); border: 0.5px solid var(--border); border-radius: 18px;
+    padding: 28px 28px 24px; margin-bottom: 16px; transition: border-color 0.3s; animation: fadeUp 0.35s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .q-card.correct { border-color: rgba(16,185,129,0.5); }
+  .q-card.wrong { border-color: rgba(239,68,68,0.4); }
+  .q-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .q-num-badge { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 700;
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; background: rgba(14,165,233,0.15); color: var(--accent-bright);
+    border: 0.5px solid rgba(14,165,233,0.3); margin-top: 2px; }
+  .q-text { font-size: 16px; font-weight: 500; line-height: 1.55; color: var(--text); }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; border-radius: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08); cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    background: rgba(255,255,255,0.03); user-select: none; }
+  .opt:hover:not(.disabled) { background: rgba(14,165,233,0.08); border-color: rgba(14,165,233,0.3); transform: translateX(2px); }
+  .opt:active:not(.disabled) { transform: scale(0.99); }
+  .opt.disabled { cursor: default; }
+  .opt.chosen-correct { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); }
+  .opt.chosen-wrong { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.35); }
+  .opt.reveal-correct { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.25); }
+  .opt-letter { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; font-family: 'Unbounded', sans-serif; flex-shrink: 0;
+    background: rgba(255,255,255,0.06); color: var(--text-muted); border: 0.5px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+  .opt.chosen-correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
+  .opt.chosen-wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
+  .opt.reveal-correct .opt-letter { background: rgba(16,185,129,0.25); color: var(--green); border-color: var(--green); }
+  .opt-text { font-size: 14px; line-height: 1.45; color: var(--text); padding-top: 4px; }
+  .feedback { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; display: none; }
+  .feedback.show { display: block; animation: fadeUp 0.25s ease; }
+  .feedback.ok { background: rgba(16,185,129,0.1); color: #6EE7B7; border-left: 2px solid var(--green); }
+  .feedback.fail { background: rgba(239,68,68,0.08); color: #FCA5A5; border-left: 2px solid var(--red); }
+  .score-screen { display: none; background: var(--navy-mid); border: 0.5px solid var(--border);
+    border-radius: 22px; padding: 40px 32px; text-align: center; animation: fadeUp 0.4s ease; }
+  .score-screen.show { display: block; }
+  .score-label-top { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 20px; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px solid var(--accent); background: rgba(14,165,233,0.07); }
+  .score-circle.great { border-color: var(--green); background: rgba(16,185,129,0.08); }
+  .score-circle.low { border-color: var(--red); background: rgba(239,68,68,0.07); }
+  .score-big { font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; color: var(--text); }
+  .score-of { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .score-title { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .score-msg { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 440px; margin: 0 auto; }
+  .score-divider { height: 0.5px; background: var(--border); margin: 24px 0; }
+  .score-meta { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+  .score-meta strong { color: var(--accent-bright); font-weight: 500; }
+  .screenshot-note { margin-top: 20px; padding: 14px 18px; border-radius: 12px;
+    background: rgba(245,158,11,0.08); border: 0.5px solid rgba(245,158,11,0.3);
+    font-size: 13px; color: #FCD34D; line-height: 1.6; }
+  .reset-btn { margin-top: 24px; padding: 12px 28px; border-radius: 40px; border: 0.5px solid var(--border);
+    background: transparent; color: var(--text-muted); font-family: 'Onest', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.2s; }
+  .reset-btn:hover { background: rgba(14,165,233,0.08); color: var(--text); border-color: var(--accent); }
+  @media (max-width: 500px) { .page { padding: 28px 14px 60px; } .q-card { padding: 20px 16px 18px; } .q-text { font-size: 15px; } .score-screen { padding: 28px 18px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="company-tag">🐟 АО «ФИШ ТУ БИЗНЕС»</div>
+    <h1>Аттестация<br><span>менеджера</span> отдела продаж</h1>
+    <p class="header-sub">Тема: знание клиента</p>
+    <div class="manager-card">
+      <div class="manager-avatar">БК</div>
+      <div class="manager-info">
+        <div class="manager-name">Карина Баласанян</div>
+        <div class="manager-role">Менеджер отдела продаж</div>
+      </div>
+    </div>
+  </div>
+  <div class="deco-line"></div>
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Прогресс</span>
+      <span class="progress-counter" id="progress-counter">0 / 12</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+  <div id="questions-container"></div>
+  <div class="score-screen" id="score-screen">
+    <div class="score-label-top">Результат аттестации</div>
+    <div class="score-circle" id="score-circle">
+      <div class="score-big" id="score-big">—</div>
+      <div class="score-of" id="score-sub"></div>
+    </div>
+    <div class="score-title" id="score-title"></div>
+    <div class="score-msg" id="score-msg-text"></div>
+    <div class="score-divider"></div>
+    <div class="score-meta">
+      <strong>Менеджер:</strong> Карина Баласанян<br>
+      <strong>Дата и время:</strong> <span id="score-datetime"></span>
+    </div>
+    <div class="screenshot-note">
+      📸 Сделайте скриншот этого экрана и отправьте руководителю для фиксации результата аттестации.
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Пройти заново</button>
+  </div>
+</div>
+<script>
+const questions = [
+  {
+    text: 'Какие поке есть в меню «Здрасте»?',
+    options: ['С лососем и авокадо', 'С форелью и кунжутным маслом', 'С тунцом и соусом понзу', 'С лососем, сыром и стружкой тунца'],
+    correct: 0,
+    ok: 'Верно. В меню есть поке с лососем и поке с креветкой. Лосось — ключевой ингредиент фирменных поке.',
+    fail: 'Неверно. В «Здрасте» есть поке с лососем и авокадо, а также с креветкой.'
+  },
+  {
+    text: 'Какие рыбные позиции есть в меню «Здрасте» на завтрак?',
+    options: ['Суши и роллы с лососем, яичница с форелью', 'Скрембл с лососем, авокадо-тост с лососем, рыба на пару', 'Яичница с форелью и круассаны', 'Только рыбный суп и сёмга на гриле'],
+    correct: 1,
+    ok: 'Верно. На завтрак: скрембл с лососем, авокадо-тост с лососем, рыба на пару — лосось присутствует сразу в нескольких позициях утреннего меню.',
+    fail: 'Неверно. Рыбные завтраки в «Здрасте»: скрембл с лососем, авокадо-тост с лососем и рыба на пару.'
+  },
+  {
+    text: 'Что из нашей продукции логично предложить Omelette с учётом их специализации на завтраках?',
+    options: ['Только готовые полуфабрикаты и бакалею', 'Замороженные овощи и картофель фри', 'Слабосолёное филе лосося и форели', 'Минтай и пангасиус в заморозке'],
+    correct: 2,
+    ok: 'Верно. Слабосолёное филе лосося и форели — классика завтрачного меню: идёт в яичные блюда, тосты, закуски. Именно это нужно предлагать в первую очередь.',
+    fail: 'Неверно. Для завтрачного корнера приоритет — слабосолёное филе лосося и форели. Это основа завтрачных блюд с рыбой.'
+  },
+  {
+    text: 'Что из нашего ассортимента приоритетно предложить «Здрасте» в первую очередь?',
+    options: ['Икра и деликатесы для премиального меню', 'Сыр, кунжут, форель', 'Форель, полуфабрикаты, масла', 'Лосось, форель и тигровые креветки'],
+    correct: 3,
+    ok: 'Верно. Лосось идёт в скрембл, тост, поке; тигровые креветки — в поке с креветкой; форель — под рыбные блюда. Эти три позиции закрывают большую часть рыбного меню.',
+    fail: 'Неверно. Приоритет: лосось (скрембл, тост, поке), тигровые креветки (поке) и форель — именно эти виды используются в блюдах «Здрасте».'
+  },
+  {
+    text: 'Какова концепция «Здрасте» с точки зрения аудитории и формата?',
+    options: ['Семейное кафе с детской зоной, завтраками весь день и уютной атмосферой', 'Молодёжный фастфуд с доставкой, без зала', 'Бизнес-ланч ресторан для офисных работников', 'Премиальный ресторан авторской кухни в спальных районах'],
+    correct: 0,
+    ok: 'Верно. «Здрасте» — семейное кафе с детской зоной и завтраками весь день. Аудитория: семьи с детьми, жители жилых кварталов, те, кто ценит уют и домашнюю атмосферу.',
+    fail: 'Неверно. «Здрасте» — семейное кафе с детской игровой зоной, завтраками весь день и уютной атмосферой.'
+  },
+  {
+    text: 'В каких городах работает сеть «Здрасте»?',
+    options: ['Только Москва', 'Москва, Подмосковье и Санкт-Петербург', 'Только Москва и Подмосковье', 'По всей России — более 50 городов'],
+    correct: 1,
+    ok: 'Верно. «Здрасте» работает в Москве, Подмосковье (Домодедово и другие) и Санкт-Петербурге. Несколько точек — значит стабильный объём закупок.',
+    fail: 'Неверно. Сеть «Здрасте» представлена в Москве, Подмосковье и Санкт-Петербурге.'
+  },
+  {
+    text: 'Скрембл с лососем в «Здрасте» — что входит в состав блюда?',
+    options: ['Яйца, лосось, авокадо, соус голландез', 'Яйца, лосось, сливочный сыр, каперсы', 'Яйца, лосось, гуакамоле, шпинат, огурцы, томаты, хлеб', 'Яйца, лосось, бекон, помидоры черри'],
+    correct: 2,
+    ok: 'Верно. Скрембл с лососем: яйца, лосось, гуакамоле, шпинат, огурцы, томаты, хлеб — полноценное авторское блюдо с лососем в составе.',
+    fail: 'Неверно. Скрембл с лососем в «Здрасте»: яйца, лосось, гуакамоле, шпинат, огурцы, томаты, хлеб.'
+  },
+  {
+    text: 'Из чего состоит поке с креветкой в «Здрасте»?',
+    options: ['Рис, тигровые креветки, сыр, майонез, огурец', 'Рис, креветки, авокадо, соус спайси', 'Креветки, листья салата, черри, пармезан, соус цезарь', 'Креветки, авокадо, красная капуста, чука, манго, цукини, зелёный лук, кунжут, яйцо пашот, нори'],
+    correct: 3,
+    ok: 'Верно. Поке с креветкой: креветки, авокадо, красная капуста, чука, манго, цукини, зелёный лук, кунжут, яйцо пашот, нори — богатый состав, тигровые креветки идут в это блюдо.',
+    fail: 'Неверно. Поке с креветкой в «Здрасте»: креветки, авокадо, красная капуста, чука, манго, цукини, зелёный лук, кунжут, яйцо пашот, нори.'
+  },
+  {
+    text: 'Какие заведения являются ближайшими соседями Omelette в ТРЦ Botanica?',
+    options: ['Chicha San Chen, Osteria Mario, PRO.Хинкали, Рыбная мануфактура, Poke & TomYum, Stars Coffee, Vigge cafe, Kitchen Garden, PIMS, Кулинарная лавка Братьев Караваевых', 'Burger King, KFC, Sbarro, Cinnabon, Subway', 'Якитория, Тануки, Чайхона №1, Шаурма Мастер, Додо Пицца', 'IL Patio, Тарантино, Мясо & Рыба, Сыроварня, Белуга'],
+    correct: 0,
+    ok: 'Верно. Все эти заведения работают в ТРЦ Botanica рядом с Omelette. Рыбная мануфактура — особенно важный сосед как потенциальный клиент.',
+    fail: 'Неверно. Ближайшие соседи Omelette: Chicha San Chen, Osteria Mario, PRO.Хинкали, Рыбная мануфактура, Poke & TomYum, Stars Coffee, Vigge cafe, Kitchen Garden, PIMS и Кулинарная лавка Братьев Караваевых.'
+  },
+  {
+    text: 'В каком ТРЦ работает кафе от ООО Эферест?',
+    options: ['ТРЦ Авиапарк', 'ТРЦ Мега Химки', 'ТРЦ Botanica', 'ТРЦ Europolis'],
+    correct: 2,
+    ok: 'Верно. ООО Эферест / ИП Орехов Глеб Станиславович управляет корнером Omelette в ТРЦ Botanica (ул. Вильгельма Пика, 11, Москва).',
+    fail: 'Неверно. Кафе Omelette от ООО Эферест находится в ТРЦ Botanica на ул. Вильгельма Пика, 11.'
+  },
+  {
+    text: 'Что такое Omelette и в чём концепция корнера?',
+    options: ['Суши-бар с доставкой в ТЦ Ботаника', 'Ресторан итальянской кухни с полным меню', 'Фудхолл с несколькими кухнями', 'Корнер с завтраками — место для паузы, перекуса и хорошего настроения'],
+    correct: 3,
+    ok: 'Верно. Omelette — корнер с завтраками, где утро начинается со вкуса и настроения. Идеальное место для паузы и перекуса.',
+    fail: 'Неверно. Omelette — корнер с завтраками в ТРЦ Botanica. Не суши-бар и не ресторан с полным меню.'
+  },
+  {
+    text: 'Помимо поке и завтраков, в каких ещё разделах меню «Здрасте» есть рыба?',
+    options: ['В разделах супы, основные блюда и закуски', 'Только в разделе завтраков', 'Только в детском меню', 'Ланч, пасхальное меню, акционные блюда'],
+    correct: 0,
+    ok: 'Верно. Рыба есть в супах, основных блюдах и закусках — клиент использует рыбу во всём меню, а не только в завтраках.',
+    fail: 'Неверно. Рыба в «Здрасте» присутствует в супах, основных блюдах и закусках — не только в завтраках.'
+  }
+];
+
+const LETTERS = ['А','Б','В','Г'];
+let answered = new Array(questions.length).fill(false);
+let correct_count = 0;
+
+function render() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card'; card.id = 'qcard-' + qi;
+    card.style.animationDelay = (qi * 0.05) + 's';
+    const optsHtml = q.options.map((o, oi) => `
+      <div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi}, ${oi})">
+        <div class="opt-letter">${LETTERS[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-num-badge">${qi + 1}</div>
+        <p class="q-text">${q.text}</p>
+      </div>
+      <div class="options">${optsHtml}</div>
+      <div class="feedback" id="fb-${qi}"></div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function choose(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = questions[qi];
+  const isCorrect = oi === q.correct;
+  if (isCorrect) correct_count++;
+  document.getElementById('qcard-' + qi).classList.add(isCorrect ? 'correct' : 'wrong');
+  for (let i = 0; i < q.options.length; i++) {
+    const el = document.getElementById('opt-' + qi + '-' + i);
+    el.classList.add('disabled');
+    if (i === oi) el.classList.add(isCorrect ? 'chosen-correct' : 'chosen-wrong');
+    else if (i === q.correct && !isCorrect) el.classList.add('reveal-correct');
+  }
+  const fb = document.getElementById('fb-' + qi);
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.ok : q.fail);
+  fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'fail');
+  updateProgress();
+  if (answered.every(a => a)) setTimeout(showScore, 500);
+}
+
+function updateProgress() {
+  const done = answered.filter(Boolean).length;
+  document.getElementById('progress-counter').textContent = done + ' / ' + questions.length;
+  document.getElementById('progress-fill').style.width = (done / questions.length * 100) + '%';
+}
+
+function showScore() {
+  document.getElementById('score-screen').classList.add('show');
+  const pct = Math.round(correct_count / questions.length * 100);
+  document.getElementById('score-big').textContent = pct + '%';
+  document.getElementById('score-sub').textContent = correct_count + ' из ' + questions.length + ' вопросов';
+  const circle = document.getElementById('score-circle');
+  const title = document.getElementById('score-title');
+  const msg = document.getElementById('score-msg-text');
+  if (pct >= 95) {
+    circle.classList.add('great'); title.textContent = 'Отлично — клиент изучен полностью';
+    msg.textContent = 'Менеджер знает специфику клиента, юрлицо, меню и потенциал для развития продаж.';
+  } else {
+    circle.classList.add('low'); title.textContent = 'Результат неудовлетворительный';
+    msg.textContent = 'Необходимо изучить материал по клиенту и пройти аттестацию повторно. Проходной балл — 95%.';
+  }
+  const now = new Date();
+  document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('score-screen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAll() {
+  answered = new Array(questions.length).fill(false); correct_count = 0;
+  document.getElementById('score-screen').classList.remove('show');
+  document.getElementById('score-circle').className = 'score-circle';
+  render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>
