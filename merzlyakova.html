@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аттестация менеджера — ФИШ ТУ БИЗНЕС</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Onest:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1D35;
+    --navy-mid: #132744;
+    --navy-light: #1B3459;
+    --ice: #E8F4FD;
+    --ice-dark: #C5DFF5;
+    --accent: #0EA5E9;
+    --accent-bright: #38BDF8;
+    --gold: #F59E0B;
+    --green: #10B981;
+    --red: #EF4444;
+    --text: #F0F7FF;
+    --text-muted: #94B8D4;
+    --border: rgba(14,165,233,0.18);
+  }
+
+  body {
+    font-family: 'Onest', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(14,165,233,0.07) 0%, transparent 60%);
+  }
+
+  .page { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .company-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 0.5px solid var(--accent);
+    padding: 6px 16px; border-radius: 40px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-bright); margin-bottom: 24px;
+    background: rgba(14,165,233,0.07);
+  }
+  .fish-icon { font-size: 14px; }
+  .header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--accent-bright); }
+  .header-sub {
+    font-size: 13px; color: var(--text-muted);
+    margin-top: 10px; letter-spacing: 0.04em;
+  }
+
+  .manager-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--navy-mid);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    margin: 24px auto 0;
+    max-width: 420px;
+  }
+  .manager-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #0EA5E9, #0369A1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700;
+    color: #fff; flex-shrink: 0;
+  }
+  .manager-info { text-align: left; }
+  .manager-name { font-size: 15px; font-weight: 500; color: var(--text); }
+  .manager-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .progress-counter { font-family: 'Unbounded', sans-serif; font-size: 13px; color: var(--accent-bright); }
+  .progress-track { height: 3px; background: var(--navy-light); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #0EA5E9, #38BDF8); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+  /* Question card */
+  .q-card {
+    background: var(--navy-mid);
+    border: 0.5px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .q-card.correct { border-color: rgba(16,185,129,0.5); }
+  .q-card.wrong { border-color: rgba(239,68,68,0.4); }
+
+  .q-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .q-num-badge {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px; font-weight: 700;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: rgba(14,165,233,0.15);
+    color: var(--accent-bright);
+    border: 0.5px solid rgba(14,165,233,0.3);
+    margin-top: 2px;
+  }
+  .q-text { font-size: 16px; font-weight: 500; line-height: 1.55; color: var(--text); }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    background: rgba(255,255,255,0.03);
+    user-select: none;
+  }
+  .opt:hover:not(.disabled) {
+    background: rgba(14,165,233,0.08);
+    border-color: rgba(14,165,233,0.3);
+    transform: translateX(2px);
+  }
+  .opt:active:not(.disabled) { transform: scale(0.99); }
+  .opt.disabled { cursor: default; }
+  .opt.chosen-correct {
+    background: rgba(16,185,129,0.1);
+    border-color: rgba(16,185,129,0.4);
+  }
+  .opt.chosen-wrong {
+    background: rgba(239,68,68,0.1);
+    border-color: rgba(239,68,68,0.35);
+  }
+  .opt.reveal-correct {
+    background: rgba(16,185,129,0.06);
+    border-color: rgba(16,185,129,0.25);
+  }
+  .opt-letter {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; font-family: 'Unbounded', sans-serif;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-muted);
+    border: 0.5px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .opt.chosen-correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
+  .opt.chosen-wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
+  .opt.reveal-correct .opt-letter { background: rgba(16,185,129,0.25); color: var(--green); border-color: var(--green); }
+  .opt-text { font-size: 14px; line-height: 1.45; color: var(--text); padding-top: 4px; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 14px; padding: 12px 16px;
+    border-radius: 10px; font-size: 13px; line-height: 1.6;
+    display: none;
+  }
+  .feedback.show { display: block; animation: fadeUp 0.25s ease; }
+  .feedback.ok { background: rgba(16,185,129,0.1); color: #6EE7B7; border-left: 2px solid var(--green); }
+  .feedback.fail { background: rgba(239,68,68,0.08); color: #FCA5A5; border-left: 2px solid var(--red); }
+
+  /* Score screen */
+  .score-screen {
+    display: none;
+    background: var(--navy-mid);
+    border: 0.5px solid var(--border);
+    border-radius: 22px;
+    padding: 40px 32px;
+    text-align: center;
+    animation: fadeUp 0.4s ease;
+  }
+  .score-screen.show { display: block; }
+
+  .score-label-top {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-muted); margin-bottom: 20px;
+  }
+  .score-circle {
+    width: 110px; height: 110px; border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px solid var(--accent);
+    background: rgba(14,165,233,0.07);
+    position: relative;
+  }
+  .score-circle.great { border-color: var(--green); background: rgba(16,185,129,0.08); }
+  .score-circle.mid { border-color: var(--gold); background: rgba(245,158,11,0.07); }
+  .score-circle.low { border-color: var(--red); background: rgba(239,68,68,0.07); }
+
+  .score-big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 36px; font-weight: 700; line-height: 1;
+    color: var(--text);
+  }
+  .score-of { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .score-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .score-msg { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 400px; margin: 0 auto; }
+
+  .score-divider {
+    height: 0.5px; background: var(--border);
+    margin: 24px 0;
+  }
+
+  .score-meta {
+    font-size: 13px; color: var(--text-muted); line-height: 1.8;
+  }
+  .score-meta strong { color: var(--accent-bright); font-weight: 500; }
+
+  .screenshot-note {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(245,158,11,0.08);
+    border: 0.5px solid rgba(245,158,11,0.3);
+    font-size: 13px;
+    color: #FCD34D;
+    line-height: 1.6;
+  }
+  .screenshot-note .note-icon { font-size: 16px; margin-bottom: 4px; }
+
+  .reset-btn {
+    margin-top: 24px;
+    padding: 12px 28px;
+    border-radius: 40px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Onest', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .reset-btn:hover { background: rgba(14,165,233,0.08); color: var(--text); border-color: var(--accent); }
+
+  /* Decorative line */
+  .deco-line {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 0 auto 32px;
+  }
+
+  @media (max-width: 500px) {
+    .page { padding: 28px 14px 60px; }
+    .q-card { padding: 20px 16px 18px; }
+    .q-text { font-size: 15px; }
+    .score-screen { padding: 28px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="company-tag">
+      <span class="fish-icon">🐟</span>
+      АО «ФИШ ТУ БИЗНЕС»
+    </div>
+    <h1>Аттестация<br><span>менеджера</span> отдела продаж</h1>
+    <p class="header-sub">Тема: знание клиента</p>
+    <div class="manager-card">
+      <div class="manager-avatar">ЕМ</div>
+      <div class="manager-info">
+        <div class="manager-name">Елена Мерзлякова</div>
+        <div class="manager-role">Менеджер отдела продаж</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Прогресс</span>
+      <span class="progress-counter" id="progress-counter">0 / 5</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div id="questions-container"></div>
+  <div class="score-screen" id="score-screen">
+    <div class="score-label-top">Результат аттестации</div>
+    <div class="score-circle" id="score-circle">
+      <div class="score-big" id="score-big">—</div>
+      <div class="score-of">из 5</div>
+    </div>
+    <div class="score-title" id="score-title"></div>
+    <div class="score-msg" id="score-msg-text"></div>
+    <div class="score-divider"></div>
+    <div class="score-meta">
+      <strong>Менеджер:</strong> Елена Мерзлякова<br>
+      <strong>Дата и время:</strong> <span id="score-datetime"></span>
+    </div>
+    <div class="screenshot-note">
+      <div class="note-icon">📸</div>
+      Сделайте скриншот этого экрана и отправьте руководителю для фиксации результата аттестации.
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Пройти заново</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    num: 1,
+    text: '«Дача» — это сеть или одиночное заведение? Сколько у них точек и в каком регионе они работают?',
+    options: [
+      'Одиночное кафе в Москве',
+      'Сеть из 5 точек в Подмосковье',
+      'Сеть из 12 кафе и кофеен в Истринском районе и соседних городах Подмосковья',
+      'Франшиза по всей России'
+    ],
+    correct: 2,
+    ok: 'Верно. 12 точек в г. Истра и районе, плюс Звенигород, Волоколамск и Зеленоград. Стабильный сетевой клиент с регулярными объёмами закупок.',
+    fail: 'Неверно. Это сеть из 12 точек, базируется в Истре и Истринском районе Подмосковья, также присутствует в Звенигороде, Волоколамске и Зеленограде.'
+  },
+  {
+    num: 2,
+    text: 'Какие рыбные блюда и морепродукты есть в меню «Дачи»? Выберите наиболее полный ответ.',
+    options: [
+      'Только рыба-гриль и суши',
+      'Судак, скумбрия, котлеты из трёх видов рыб (треска/горбуша/щука), драники с лососем, цезарь с тигровыми креветками',
+      'Семга на пару и тунец с овощами',
+      'Форель и дорадо — основные позиции меню'
+    ],
+    correct: 1,
+    ok: 'Верно. В меню есть судак, скумбрия, котлеты из трески/горбуши/щуки, драники с лососем и цезарь с тигровыми креветками — прямые точки входа для нашего ассортимента.',
+    fail: 'Неверно. В меню: филе судака, скумбрия, котлеты из трёх рыб (треска, горбуша, щука), драники с лососем, цезарь с тигровыми креветками и креветки панко.'
+  },
+  {
+    num: 3,
+    text: 'Какое рыбное филе из нашего ассортимента наиболее приоритетно предложить «Даче» в первую очередь?',
+    options: [
+      'Минтай и пангасиус — они дешевле всего',
+      'Судак, треска, лосось, скумбрия и горбуша — эти виды уже есть в их меню',
+      'Только тунец и дорадо — они подходят для авторской кухни',
+      'Морской окунь и карп'
+    ],
+    correct: 1,
+    ok: 'Верно. Предлагаем то, что уже в рецептурах клиента: судак, треска, лосось, скумбрия, горбуша — это работает на их кухне прямо сейчас и не требует доработки меню.',
+    fail: 'Неверно. Нужно опираться на меню клиента: судак, треска, лосось, скумбрия и горбуша — именно эти виды присутствуют в блюдах «Дачи».'
+  },
+  {
+    num: 4,
+    text: 'Входящий звонок. Клиент представляется: «ИП Крук Екатерина Александровна». Что это за клиент?',
+    options: [
+      'Новый клиент, ранее не встречался',
+      'Поставщик рыбы — наш конкурент',
+      'Это юридическое лицо сети кафе «Дача»',
+      'Частное лицо, нужно переключить на отдел розницы'
+    ],
+    correct: 2,
+    ok: 'Верно. ИП Крук Екатерина Александровна — юрлицо сети «Дача». Менеджер должен мгновенно связывать юридическое название с брендом, чтобы не потерять клиента.',
+    fail: 'Неверно. ИП Крук Екатерина Александровна — это юридическое лицо сети кафе «Дача». Нужно знать это наизусть, чтобы мгновенно реагировать при входящем звонке.'
+  },
+  {
+    num: 5,
+    text: 'В меню «Дачи» есть раздел «Постное». Как грамотно использовать это в работе с клиентом?',
+    options: [
+      'Никак — постное меню не касается поставок рыбы',
+      'Предложить убрать мясные блюда из поставки',
+      'Заблаговременно до начала поста предложить увеличить объём рыбного филе и расширить ассортимент для постных позиций',
+      'Отправить прайс на растительные масла и овощи'
+    ],
+    correct: 2,
+    ok: 'Верно. В период постов спрос на рыбу резко растёт. Грамотный менеджер предупреждает клиента заранее, предлагает увеличить объём и новые виды рыбного филе под сезон.',
+    fail: 'Неверно. Постное меню — прямой сигнал к росту поставки рыбы. Нужно заблаговременно предлагать увеличить объём и расширить ассортимент под этот сезон.'
+  }
+];
+
+const LETTERS = ['А', 'Б', 'В', 'Г'];
+let answered = new Array(questions.length).fill(false);
+let correct_count = 0;
+
+function render() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard-' + qi;
+    card.style.animationDelay = (qi * 0.06) + 's';
+
+    const optsHtml = q.options.map((o, oi) => `
+      <div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi}, ${oi})">
+        <div class="opt-letter">${LETTERS[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-num-badge">${q.num}</div>
+        <p class="q-text">${q.text}</p>
+      </div>
+      <div class="options">${optsHtml}</div>
+      <div class="feedback" id="fb-${qi}"></div>
+    `;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function choose(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = questions[qi];
+  const isCorrect = oi === q.correct;
+  if (isCorrect) correct_count++;
+
+  const card = document.getElementById('qcard-' + qi);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  for (let i = 0; i < q.options.length; i++) {
+    const el = document.getElementById('opt-' + qi + '-' + i);
+    el.classList.add('disabled');
+    if (i === oi) el.classList.add(isCorrect ? 'chosen-correct' : 'chosen-wrong');
+    else if (i === q.correct && !isCorrect) el.classList.add('reveal-correct');
+  }
+
+  const fb = document.getElementById('fb-' + qi);
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.ok : q.fail);
+  fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'fail');
+
+  updateProgress();
+  if (answered.every(a => a)) setTimeout(showScore, 500);
+}
+
+function updateProgress() {
+  const done = answered.filter(Boolean).length;
+  const total = questions.length;
+  document.getElementById('progress-counter').textContent = done + ' / ' + total;
+  document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+}
+
+function showScore() {
+  document.getElementById('score-screen').classList.add('show');
+  document.getElementById('score-big').textContent = correct_count;
+
+  const circle = document.getElementById('score-circle');
+  const title = document.getElementById('score-title');
+  const msg = document.getElementById('score-msg-text');
+
+  if (correct_count === 5) {
+    circle.classList.add('great');
+    title.textContent = 'Отлично — клиент изучен полностью';
+    msg.textContent = 'Менеджер знает специфику клиента, меню, юридическое лицо и умеет видеть возможности для продаж.';
+  } else if (correct_count >= 3) {
+    circle.classList.add('mid');
+    title.textContent = 'Хорошо, но есть пробелы';
+    msg.textContent = 'Рекомендуется повторить материал по клиенту перед следующим звонком. Особое внимание — вопросам с неверными ответами.';
+  } else {
+    circle.classList.add('low');
+    title.textContent = 'Необходима дополнительная подготовка';
+    msg.textContent = 'Менеджеру следует изучить сайт и меню клиента, запомнить юридическое лицо и пройти аттестацию повторно.';
+  }
+
+  const now = new Date();
+  const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+  document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', options);
+
+  document.getElementById('score-screen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAll() {
+  answered = new Array(questions.length).fill(false);
+  correct_count = 0;
+  document.getElementById('score-screen').classList.remove('show');
+  document.getElementById('score-circle').className = 'score-circle';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>
