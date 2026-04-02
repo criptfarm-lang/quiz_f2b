@@ -355,15 +355,12 @@ function showScore() {
   const circle = document.getElementById('score-circle');
   const title = document.getElementById('score-title');
   const msg = document.getElementById('score-msg-text');
-  if (pct >= 87) {
+  if (pct >= 95) {
     circle.classList.add('great'); title.textContent = 'Отлично — клиенты изучены полностью';
     msg.textContent = 'Менеджер знает специфику всех клиентов, меню, юрлица, потенциал развития и стратегию работы.';
-  } else if (pct >= 60) {
-    circle.classList.add('mid'); title.textContent = 'Хорошо, но есть пробелы';
-    msg.textContent = 'Рекомендуется повторить материал по клиентам, уделив особое внимание вопросам с неверными ответами.';
   } else {
-    circle.classList.add('low'); title.textContent = 'Необходима дополнительная подготовка';
-    msg.textContent = 'Менеджеру следует изучить сайты клиентов, запомнить юрлица и пройти аттестацию повторно.';
+    circle.classList.add('low'); title.textContent = 'Результат неудовлетворительный';
+    msg.textContent = 'Необходимо изучить материал по клиентам и пройти аттестацию повторно. Проходной балл — 95%.';
   }
   const now = new Date();
   document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
