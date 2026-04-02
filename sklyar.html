@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аттестация менеджера — ФИШ ТУ БИЗНЕС</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Onest:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1D35; --navy-mid: #132744; --navy-light: #1B3459;
+    --accent: #0EA5E9; --accent-bright: #38BDF8;
+    --gold: #F59E0B; --green: #10B981; --red: #EF4444;
+    --text: #F0F7FF; --text-muted: #94B8D4;
+    --border: rgba(14,165,233,0.18);
+  }
+  body { font-family: 'Onest', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh;
+    background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(14,165,233,0.07) 0%, transparent 60%); }
+  .page { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .header { text-align: center; margin-bottom: 48px; }
+  .company-tag { display: inline-flex; align-items: center; gap: 8px; border: 0.5px solid var(--accent);
+    padding: 6px 16px; border-radius: 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-bright); margin-bottom: 24px; background: rgba(14,165,233,0.07); }
+  .header h1 { font-family: 'Unbounded', sans-serif; font-size: clamp(20px, 5vw, 32px); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.02em; color: var(--text); margin-bottom: 6px; }
+  .header h1 span { color: var(--accent-bright); }
+  .header-sub { font-size: 13px; color: var(--text-muted); margin-top: 10px; letter-spacing: 0.04em; }
+  .manager-card { display: flex; align-items: center; gap: 14px; background: var(--navy-mid);
+    border: 0.5px solid var(--border); border-radius: 14px; padding: 14px 20px; margin: 24px auto 0; max-width: 420px; }
+  .manager-avatar { width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #0EA5E9, #0369A1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .manager-name { font-size: 15px; font-weight: 500; color: var(--text); }
+  .manager-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .deco-line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto 32px; }
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .progress-counter { font-family: 'Unbounded', sans-serif; font-size: 13px; color: var(--accent-bright); }
+  .progress-track { height: 3px; background: var(--navy-light); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #0EA5E9, #38BDF8); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .q-card { background: var(--navy-mid); border: 0.5px solid var(--border); border-radius: 18px;
+    padding: 28px 28px 24px; margin-bottom: 16px; transition: border-color 0.3s; animation: fadeUp 0.35s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .q-card.correct { border-color: rgba(16,185,129,0.5); }
+  .q-card.wrong { border-color: rgba(239,68,68,0.4); }
+  .q-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .q-num-badge { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 700;
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; background: rgba(14,165,233,0.15); color: var(--accent-bright);
+    border: 0.5px solid rgba(14,165,233,0.3); margin-top: 2px; }
+  .q-text { font-size: 16px; font-weight: 500; line-height: 1.55; color: var(--text); }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; border-radius: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08); cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    background: rgba(255,255,255,0.03); user-select: none; }
+  .opt:hover:not(.disabled) { background: rgba(14,165,233,0.08); border-color: rgba(14,165,233,0.3); transform: translateX(2px); }
+  .opt:active:not(.disabled) { transform: scale(0.99); }
+  .opt.disabled { cursor: default; }
+  .opt.chosen-correct { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); }
+  .opt.chosen-wrong { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.35); }
+  .opt.reveal-correct { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.25); }
+  .opt-letter { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; font-family: 'Unbounded', sans-serif; flex-shrink: 0;
+    background: rgba(255,255,255,0.06); color: var(--text-muted); border: 0.5px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+  .opt.chosen-correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
+  .opt.chosen-wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
+  .opt.reveal-correct .opt-letter { background: rgba(16,185,129,0.25); color: var(--green); border-color: var(--green); }
+  .opt-text { font-size: 14px; line-height: 1.45; color: var(--text); padding-top: 4px; }
+  .feedback { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; display: none; }
+  .feedback.show { display: block; animation: fadeUp 0.25s ease; }
+  .feedback.ok { background: rgba(16,185,129,0.1); color: #6EE7B7; border-left: 2px solid var(--green); }
+  .feedback.fail { background: rgba(239,68,68,0.08); color: #FCA5A5; border-left: 2px solid var(--red); }
+  .score-screen { display: none; background: var(--navy-mid); border: 0.5px solid var(--border);
+    border-radius: 22px; padding: 40px 32px; text-align: center; animation: fadeUp 0.4s ease; }
+  .score-screen.show { display: block; }
+  .score-label-top { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 20px; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px solid var(--accent); background: rgba(14,165,233,0.07); }
+  .score-circle.great { border-color: var(--green); background: rgba(16,185,129,0.08); }
+  .score-circle.mid { border-color: var(--gold); background: rgba(245,158,11,0.07); }
+  .score-circle.low { border-color: var(--red); background: rgba(239,68,68,0.07); }
+  .score-big { font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; color: var(--text); }
+  .score-of { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .score-title { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .score-msg { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 440px; margin: 0 auto; }
+  .score-divider { height: 0.5px; background: var(--border); margin: 24px 0; }
+  .score-meta { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+  .score-meta strong { color: var(--accent-bright); font-weight: 500; }
+  .screenshot-note { margin-top: 20px; padding: 14px 18px; border-radius: 12px;
+    background: rgba(245,158,11,0.08); border: 0.5px solid rgba(245,158,11,0.3);
+    font-size: 13px; color: #FCD34D; line-height: 1.6; }
+  .reset-btn { margin-top: 24px; padding: 12px 28px; border-radius: 40px; border: 0.5px solid var(--border);
+    background: transparent; color: var(--text-muted); font-family: 'Onest', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.2s; }
+  .reset-btn:hover { background: rgba(14,165,233,0.08); color: var(--text); border-color: var(--accent); }
+  @media (max-width: 500px) { .page { padding: 28px 14px 60px; } .q-card { padding: 20px 16px 18px; } .q-text { font-size: 15px; } .score-screen { padding: 28px 18px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="company-tag">🐟 АО «ФИШ ТУ БИЗНЕС»</div>
+    <h1>Аттестация<br><span>менеджера</span> отдела продаж</h1>
+    <p class="header-sub">Тема: знание клиента</p>
+    <div class="manager-card">
+      <div class="manager-avatar">СИ</div>
+      <div class="manager-info">
+        <div class="manager-name">Скляр И.</div>
+        <div class="manager-role">Менеджер отдела продаж</div>
+      </div>
+    </div>
+  </div>
+  <div class="deco-line"></div>
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Прогресс</span>
+      <span class="progress-counter" id="progress-counter">0 / 17/span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+  <div id="questions-container"></div>
+  <div class="score-screen" id="score-screen">
+    <div class="score-label-top">Результат аттестации</div>
+    <div class="score-circle" id="score-circle">
+      <div class="score-big" id="score-big">—</div>
+      <div class="score-of" id="score-sub"></div>
+    </div>
+    <div class="score-title" id="score-title"></div>
+    <div class="score-msg" id="score-msg-text"></div>
+    <div class="score-divider"></div>
+    <div class="score-meta">
+      <strong>Менеджер:</strong> Скляр И.<br>
+      <strong>Дата и время:</strong> <span id="score-datetime"></span>
+    </div>
+    <div class="screenshot-note">
+      📸 Сделайте скриншот этого экрана и отправьте руководителю для фиксации результата аттестации.
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Пройти заново</button>
+  </div>
+</div>
+<script>
+const questions = [
+  {
+    text: 'Чем занимается «Рыбку съесть.ру»?',
+    options: ['Розничная сеть рыбных магазинов в Москве','Оптовый дистрибьютор рыбы для HoReCa','Сервис совместных закупок рыбы и морепродуктов','Рыбный ресторан с доставкой'],
+    correct: 2,
+    ok: 'Верно. «Рыбку съесть.ру» — сервис совместных закупок: агрегирует спрос частных покупателей и закупает рыбу и морепродукты оптом. Не ресторан и не дистрибьютор.',
+    fail: 'Неверно. «Рыбку съесть.ру» — сервис совместных закупок рыбы и морепродуктов для частных лиц.'
+  },
+  {
+    text: 'Есть ли у ИТФИШ собственный сайт?',
+    options: ['Нет, работают только через Telegram','Да, сайт eatfish.ru','Нет, только соцсети','Да, рыбкусъесть.рф'],
+    correct: 1,
+    ok: 'Верно. У клиента есть собственный сайт eatfish.ru. Менеджер должен знать это и регулярно проверять сайт клиента.',
+    fail: 'Неверно. У ИТФИШ есть собственный сайт — eatfish.ru.'
+  },
+  {
+    text: 'Под каким юридическим лицом работает «Рыбку съесть.ру»?',
+    options: ['ООО ИТФИШ','ИП Трегубов Данил Денисович','РЫБКА.РУ','ИП Федорова Мария Леонидовна'],
+    correct: 0,
+    ok: 'Верно. Юридическое лицо — ООО ИТФИШ. При входящем звонке или в документах нужно мгновенно узнавать этого клиента.',
+    fail: 'Неверно. «Рыбку съесть.ру» работает под юрлицом ООО ИТФИШ.'
+  },
+  {
+    text: 'Через какие каналы ИТФИШ работает со своей аудиторией?',
+    options: ['Только через мобильное приложение и Telegram','Только через сайт и email-рассылку','Telegram-канал и офлайн-точки выдачи','Instagram, Telegram, Facebook и taplink'],
+    correct: 3,
+    ok: 'Верно. Клиент активен в Instagram, Telegram, Facebook и использует taplink как агрегатор ссылок. Менеджер должен следить за их соцсетями.',
+    fail: 'Неверно. ИТФИШ работает через Instagram, Telegram, Facebook и taplink.'
+  },
+  {
+    text: 'Как посмотреть актуальный ассортимент «Рыбку съесть.ру» онлайн?',
+    options: ['Прайс не дают, цены устно','В мобильном приложении ООО ИТФИШ','На сайте eatfish.ru — прайс-лист на Google Sheets','Прайс-лист отправляют в Telegram по запросу'],
+    correct: 2,
+    ok: 'Верно. Актуальный прайс-лист размещён на Google Sheets и доступен через сайт eatfish.ru. Менеджер должен знать, где смотреть ассортимент клиента.',
+    fail: 'Неверно. Ассортимент ИТФИШ доступен онлайн — прайс-лист на Google Sheets через сайт eatfish.ru.'
+  },
+  {
+    text: 'Помимо рыбы и морепродуктов, что ещё есть в ассортименте ИТФИШ? Выберите наиболее полный ответ.',
+    options: ['Рыба, морепродукты, замороженные овощи и ягоды, сыры, колбасные изделия, вино, соусы','Рыба и замороженные овощи, грибы, маринады, стрипсы','Рыба, суши-ингредиенты и напитки, консервы, чука','Рыба, икра и морепродукты, водоросли, стрипсы, фарши'],
+    correct: 0,
+    ok: 'Верно. Ассортимент очень широкий: помимо рыбы и морепродуктов — замороженные овощи и ягоды, грибы, итальянские сыры, колбасные изделия (салями, прошутто), вино и соусы.',
+    fail: 'Неверно. У ИТФИШ богатый ассортимент: рыба, морепродукты, заморозка, итальянские сыры и деликатесы, колбасы, вино, соусы — не только рыба.'
+  },
+  {
+    text: 'Какое из перечисленных наименований есть в ассортименте «Рыбку съесть.ру»?',
+    options: ['Краб камчатский живой','Устрицы живые','Мраморная говядина стейк рибай','Улитки по-бургундски'],
+    correct: 3,
+    ok: 'Верно. Улитки по-бургундски есть в ассортименте — наряду с другими деликатесами: саворин, чавыча, осётр, стерлядь, морской ёж. Ассортимент нестандартный и широкий.',
+    fail: 'Неверно. В ассортименте ИТФИШ есть улитки по-бургундски (и другие виды улиток). Краба камчатского живого, живых устриц и стейков рибай в прайсе нет.'
+  }
+,
+  {
+    text: 'Что такое TOYOSU и в чём их концепция?',
+    options: ['Сеть ресторанов японской кухни с залом и официантами','Служба доставки суши из центральной кухни, премиальные продукты с Владивостока','Первый российский аналог японского суши-маркета: прозрачная кухня с роботами и витрина со свежими наборами','Сеть фастфуда с роллами и воками в ТЦ Москвы, Хабаровска и Владивостока'],
+    correct: 2,
+    ok: 'Верно. TOYOSU — первый российский аналог настоящего японского суши-маркета: роботы формуют рис и нарезают роллы, всё производство видно через прозрачную кухню, наборы лежат на витрине.',
+    fail: 'Неверно. TOYOSU — первый российский аналог японского суши-маркета с прозрачной кухней, роботами и витриной готовых наборов. Не ресторан и не доставка.'
+  },
+  {
+    text: 'Где размещаются точки TOYOSU и как выглядит их формат?',
+    options: ['Тёмные кухни только для доставки','Отдельно стоящие рестораны в спальных районах','Фудкорты в бизнес-центрах','В ТЦ — открытая прозрачная кухня с роботами и прилавок с готовыми наборами'],
+    correct: 3,
+    ok: 'Верно. TOYOSU работает в торговых центрах: Europolis, Авиапарк, Кунцево Плаза, ТРЦ Весна. Формат — открытая кухня с роботами на виду у покупателей и витрина с готовыми наборами.',
+    fail: 'Неверно. Точки TOYOSU расположены в торговых центрах Москвы. Формат — прозрачная кухня с роботами + витрина с готовыми наборами суши.'
+  },
+  {
+    text: 'Какую японскую технологию продаж использует TOYOSU?',
+    options: ['Омакасе — шеф сам выбирает блюда для гостя','Предзаказ через приложение с доставкой на следующий день','Гость сам выбирает готовые наборы с витрины; за час до закрытия — суши-сейл со скидками','Продажа по подписке с еженедельным меню'],
+    correct: 2,
+    ok: 'Верно. Как в настоящей Японии: гость сам выбирает наборы с витрины. За час до закрытия — суши-сейл с большими скидками на остатки. Это классическая японская модель суши-маркета.',
+    fail: 'Неверно. TOYOSU использует японскую технологию: выбор с витрины самостоятельно + суши-сейл за час до закрытия со скидками — точно как в Японии.'
+  },
+  {
+    text: 'Под каким юридическим лицом работает TOYOSU?',
+    options: ['ООО ТОЁСУ','ООО ФУГУ МОСКОУ','ООО ПРОДТОРГ','ИП Бугаева Валерия Борисовна'],
+    correct: 1,
+    ok: 'Верно. Юридическое лицо — ООО ФУГУ МОСКОУ. При входящем звонке или в документах нужно мгновенно узнавать клиента по этому названию.',
+    fail: 'Неверно. TOYOSU работает под юрлицом ООО ФУГУ МОСКОУ — именно это название будет в документах и при звонке.'
+  },
+  {
+    text: 'Что из нашего ассортимента приоритетно предложить TOYOSU и почему?',
+    options: ['Филе лосося, тунца, морской окунь — основное сырьё для суши и сашими, которое идёт на витрину ежедневно','Замороженные овощи и соусы','Готовые котлеты и полуфабрикаты','Только тигровые креветки для декора'],
+    correct: 0,
+    ok: 'Верно. TOYOSU делает суши и сашими ежедневно — им нужно стабильное охлаждённое или свежемороженое филе: лосось, тунец, морской окунь. Объём высокий и регулярный — клиент работает каждый день.',
+    fail: 'Неверно. Приоритет — рыбное филе для суши и сашими: лосось, тунец, морской окунь. Это ежедневный расход, стабильный объём.'
+  }
+],
+  {
+    text: 'Есть ли в ассортименте ИТФИШ живые морепродукты или только замороженные?',
+    options: ['Только замороженная и охлаждённая рыба','Готовые блюда и полуфабрикаты, замороженная рыба','Только замороженные морепродукты, охлаждённые и икра','Есть и замороженные, и охлаждённые, и живые'],
+    correct: 3,
+    ok: 'Верно. В прайсе ИТФИШ есть осётр штучно, стерлядь штучно — это живые или охлаждённые позиции. Плюс широкий ассортимент заморозки и готовых блюд.',
+    fail: 'Неверно. У ИТФИШ есть и замороженные, и охлаждённые, и живые морепродукты — в том числе осётр и стерлядь штучно.'
+  },
+  {
+    text: 'Какие виды филе форели есть в прайсе ИТФИШ?',
+    options: ['Слабосолёное, копчёное, охлаждённое, замороженное','Только свежемороженое филе','Только слабосолёное филе Trim PR','Горячего и холодного копчения'],
+    correct: 0,
+    ok: 'Верно. В прайсе ИТФИШ форель представлена в нескольких видах обработки: слабосолёное (СС), горячего копчения (ХК), охлаждённое и замороженное — разные Trim под разные задачи.',
+    fail: 'Неверно. У ИТФИШ форель в нескольких видах: слабосолёное, копчёное, охлаждённое и замороженное — широкая линейка.'
+  },
+  {
+    text: 'Есть ли в ассортименте ИТФИШ фрикадельки из рыбы?',
+    options: ['Да, только котлеты из минтая','Да, только из судака и щуки','Нет, только цельное филе и стейки','Да — лосось-треска-кукуруза, лосось-брокколи-шпинат, лосось-батат-кукуруза, лосось-креветка-шпинат'],
+    correct: 3,
+    ok: 'Верно. В прайсе четыре вида фрикаделек из лосося с разными добавками: с треской и кукурузой, с брокколи и шпинатом, с бататом и кукурузой, с креветкой и шпинатом.',
+    fail: 'Неверно. В ассортименте ИТФИШ есть четыре вида рыбных фрикаделек на основе лосося с разными добавками.'
+  },
+  {
+    text: 'TOYOSU принципиально отличается от обычных суши-ресторанов подходом к сырью. В чём он?',
+    options: ['Работают только с местными поставщиками из Подмосковья и Приморья','Закупают рыбу оптом 5 раз в неделю','Используют только замороженную рыбу высшего сорта из Норвегии','Охлаждённая рыба, заморозка исключена, часть морепродуктов — живая прямо из аквариума'],
+    correct: 3,
+    ok: 'Верно. TOYOSU принципиально против заморозки — только охлаждёнка, доставляемая самолётами. Часть морепродуктов (гребешок, спизула) идут с витрины прямо из аквариума.',
+    fail: 'Неверно. TOYOSU исключает заморозку: охлаждённая рыба доставляется самолётами, часть морепродуктов живые — прямо из аквариума на точке.'
+  },
+  {
+    text: 'В каком ценовом диапазоне находятся наборы TOYOSU?',
+    options: ['1500–5000 руб. — только премиум','100–300 руб. — демократичный сегмент','275–4000 руб. — широкий диапазон от маленьких наборов до премиальных','500–800 руб. — средний сегмент'],
+    correct: 2,
+    ok: 'Верно. Диапазон очень широкий: от 275 руб. за маленький набор до 2745 руб. и выше за премиальные позиции. Средний чек точки — 750–1000 руб.',
+    fail: 'Неверно. Наборы TOYOSU стоят от 275 до ~4000 руб. — широкий диапазон от доступных позиций до премиальных наборов.'
+  }
+];
+
+const LETTERS = ['А','Б','В','Г'];
+let answered = new Array(questions.length).fill(false);
+let correct_count = 0;
+
+function render() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card'; card.id = 'qcard-' + qi;
+    card.style.animationDelay = (qi * 0.05) + 's';
+    const optsHtml = q.options.map((o, oi) => `
+      <div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi}, ${oi})">
+        <div class="opt-letter">${LETTERS[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-num-badge">${qi + 1}</div>
+        <p class="q-text">${q.text}</p>
+      </div>
+      <div class="options">${optsHtml}</div>
+      <div class="feedback" id="fb-${qi}"></div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function choose(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = questions[qi];
+  const isCorrect = oi === q.correct;
+  if (isCorrect) correct_count++;
+  document.getElementById('qcard-' + qi).classList.add(isCorrect ? 'correct' : 'wrong');
+  for (let i = 0; i < q.options.length; i++) {
+    const el = document.getElementById('opt-' + qi + '-' + i);
+    el.classList.add('disabled');
+    if (i === oi) el.classList.add(isCorrect ? 'chosen-correct' : 'chosen-wrong');
+    else if (i === q.correct && !isCorrect) el.classList.add('reveal-correct');
+  }
+  const fb = document.getElementById('fb-' + qi);
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + (isCorrect ? q.ok : q.fail);
+  fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'fail');
+  updateProgress();
+  if (answered.every(a => a)) setTimeout(showScore, 500);
+}
+
+function updateProgress() {
+  const done = answered.filter(Boolean).length;
+  document.getElementById('progress-counter').textContent = done + ' / ' + questions.length;
+  document.getElementById('progress-fill').style.width = (done / questions.length * 100) + '%';
+}
+
+function showScore() {
+  document.getElementById('score-screen').classList.add('show');
+  const pct = Math.round(correct_count / questions.length * 100);
+  document.getElementById('score-big').textContent = pct + '%';
+  document.getElementById('score-sub').textContent = correct_count + ' из ' + questions.length + ' вопросов';
+  const circle = document.getElementById('score-circle');
+  const title = document.getElementById('score-title');
+  const msg = document.getElementById('score-msg-text');
+  if (pct >= 95) {
+    circle.classList.add('great'); title.textContent = 'Отлично — клиенты изучены полностью';
+    msg.textContent = 'Менеджер знает специфику клиентов, юрлица, каналы коммуникации и ассортимент.';
+  } else {
+    circle.classList.add('low'); title.textContent = 'Результат неудовлетворительный';
+    msg.textContent = 'Необходимо изучить материал по клиентам и пройти аттестацию повторно. Проходной балл — 95%.';
+  }
+  const now = new Date();
+  document.getElementById('score-datetime').textContent = now.toLocaleString('ru-RU', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('score-screen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAll() {
+  answered = new Array(questions.length).fill(false); correct_count = 0;
+  document.getElementById('score-screen').classList.remove('show');
+  document.getElementById('score-circle').className = 'score-circle';
+  render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>
