@@ -1866,13 +1866,6 @@ function nextStep(){
   if(currentStep < mod.lessons.length - 1){
     currentStep++;
     showLesson();
-  } else if(mod.quiz && mod.quiz.length > 0){
-    // Уроки закончились — переходим к тесту модуля
-    currentQ = 0;
-    quizScore = 0;
-    quizAnswers = [];
-    startQuizTimer();
-    showQuiz();
   } else {
     currentStep = 0;
     completedModules[currentModule] = true;
@@ -1880,6 +1873,26 @@ function nextStep(){
     showScreen('result-simple');
   }
 }
+
+// Прямой запуск теста через URL `?test=N` (N — номер модуля, 1-based).
+// Используется при рассылке менеджерам: одна ссылка → сразу тест с таймером 60 мин.
+function startTestFromUrl(){
+  var params = new URLSearchParams(window.location.search);
+  var raw = params.get('test');
+  if(!raw) return false;
+  var idx = parseInt(raw, 10) - 1;
+  if(isNaN(idx) || idx < 0 || idx >= modules.length) return false;
+  var mod = modules[idx];
+  if(!mod.quiz || mod.quiz.length === 0) return false;
+  currentModule = idx;
+  currentQ = 0;
+  quizScore = 0;
+  quizAnswers = [];
+  startQuizTimer();
+  showQuiz();
+  return true;
+}
+document.addEventListener('DOMContentLoaded', function(){ startTestFromUrl(); });
 
 function showQuiz(){
   var mod = modules[currentModule];
