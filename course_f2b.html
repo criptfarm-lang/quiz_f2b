@@ -489,7 +489,6 @@ var extraQuizQuestions = [
     q: 'Какой нейросетью вы пользуетесь на постоянной основе?',
     type: 'text',
     noScore: true,
-    placeholder: 'Например: ChatGPT, Claude, Gemini, YandexGPT…',
     explain: 'Спасибо. Этот ответ нужен, чтобы понимать стек, которым пользуется команда.'
   },
   {
@@ -2202,7 +2201,7 @@ function showQuiz(){
   if(prevQBtn) prevQBtn.style.display = (currentQ > 0) ? 'inline-block' : 'none';
 
   if(q.type === 'text'){
-    var ph = q.placeholder || 'Введите ответ…';
+    var ph = q.placeholder || '';
     document.getElementById('quiz-content').innerHTML =
       '<div class="quiz-card">' +
       '<div class="quiz-label">Вопрос ' + (currentQ+1) + ' из ' + mod.quiz.length + '</div>' +
