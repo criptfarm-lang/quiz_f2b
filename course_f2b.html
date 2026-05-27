@@ -82,6 +82,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .opt-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px}
 .explain{margin-top:12px;padding:12px 16px;background:rgba(0,212,170,0.06);border-left:3px solid var(--accent);border-radius:8px;font-size:13px;color:var(--muted);line-height:1.6;display:none}
 .explain.show{display:block}
+.text-input{width:100%;padding:14px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:'Manrope',sans-serif;color:var(--text);transition:border-color 0.2s}
+.text-input:focus{outline:none;border-color:var(--accent)}
+.text-input.correct{border-color:var(--correct);background:rgba(0,212,170,0.08);color:var(--correct)}
+.text-input.wrong{border-color:var(--wrong);background:rgba(255,77,109,0.08);color:var(--wrong)}
+.text-input:disabled{cursor:default;opacity:0.95}
+.btn-submit{margin-top:12px;padding:12px 22px;background:var(--accent);color:#0a0f1e;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;border:none;border-radius:10px;cursor:pointer;transition:all 0.2s}
+.btn-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,212,170,0.3)}
+.btn-submit:disabled{opacity:0.4;cursor:not-allowed}
 
 /* BUTTONS */
 .btn-row{display:flex;gap:12px;margin-top:24px}
@@ -140,6 +148,14 @@ h1 span{color:var(--accent)}
 .bd-row:last-child{border-bottom:none}
 .bd-q{flex:1;color:var(--muted)}
 .bd-a{font-weight:600}.bd-a.ok{color:var(--correct)}.bd-a.fail{color:var(--wrong)}
+.bd-row.text{align-items:flex-start;padding:12px 14px;background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.18);border-radius:10px;margin-bottom:8px}
+.bd-row.text.fail{background:rgba(255,77,109,0.06);border-color:rgba(255,77,109,0.25)}
+.bd-row.text .bd-q-block{flex:1;display:flex;flex-direction:column;gap:6px}
+.bd-row.text .bd-q-full{color:var(--text);font-weight:600;font-size:13px;line-height:1.4}
+.bd-row.text .bd-user{color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;font-weight:500;word-break:break-word}
+.bd-row.text .bd-user.ok{color:var(--correct)}
+.bd-row.text .bd-user.fail{color:var(--wrong);text-decoration:line-through;text-decoration-color:rgba(255,77,109,0.6)}
+.bd-row.text .bd-hint{display:block;margin-top:4px;color:var(--correct);font-weight:600;font-size:13px;text-decoration:none}
 
 @media(max-width:600px){
   .modules-grid,.grid2,.stats-row{grid-template-columns:1fr}
@@ -468,6 +484,29 @@ var extraQuizQuestions = [
     ],
     answer: 1,
     explain: 'Факт ликвидации проверяется по данным налоговой (egrul.nalog.ru). После подтверждения — сменить статус на «ЗАКРЫЛСЯ».'
+  },
+  {
+    q: 'Какой нейросетью вы пользуетесь на постоянной основе?',
+    type: 'text',
+    noScore: true,
+    placeholder: 'Например: ChatGPT, Claude, Gemini, YandexGPT…',
+    explain: 'Спасибо. Этот ответ нужен, чтобы понимать стек, которым пользуется команда.'
+  },
+  {
+    q: 'Какой единственный номер телефона для звонков в компании?',
+    type: 'text',
+    answer: '88007002703',
+    normalize: 'digits',
+    placeholder: '8 800 …',
+    explain: 'Единственный номер для звонков в компании: 8 800 700-27-03. Менеджер обязан знать наизусть.'
+  },
+  {
+    q: 'Какой единственный номер для переписок с клиентами?',
+    type: 'text',
+    answer: '89937007087',
+    normalize: 'digits',
+    placeholder: '8 993 …',
+    explain: 'Единственный номер для переписок с клиентами: 8 993 700-70-87. Менеджер обязан знать наизусть.'
   }
 ];
 
@@ -2162,17 +2201,37 @@ function showQuiz(){
   var prevQBtn = document.getElementById('btn-prev-q');
   if(prevQBtn) prevQBtn.style.display = (currentQ > 0) ? 'inline-block' : 'none';
 
-  var opts = q.options.map(function(o,i){
-    return '<button class="opt" onclick="selectOpt('+i+')" id="qopt-'+i+'"><span style="opacity:0.4;margin-right:10px">'+['А','Б','В','Г'][i]+'</span>'+o+'</button>';
-  }).join('');
+  if(q.type === 'text'){
+    var ph = q.placeholder || 'Введите ответ…';
+    document.getElementById('quiz-content').innerHTML =
+      '<div class="quiz-card">' +
+      '<div class="quiz-label">Вопрос ' + (currentQ+1) + ' из ' + mod.quiz.length + '</div>' +
+      '<div class="quiz-q">' + q.q + '</div>' +
+      '<input class="text-input" id="qtext-input" type="text" autocomplete="off" placeholder="' + ph + '">' +
+      '<button class="btn-submit" id="qtext-submit" onclick="submitTextAnswer()">Ответить</button>' +
+      '<div class="explain" id="quiz-explain">' + q.explain + '</div>' +
+      '</div>';
+    setTimeout(function(){
+      var inp = document.getElementById('qtext-input');
+      if(!inp) return;
+      inp.focus();
+      inp.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){ e.preventDefault(); submitTextAnswer(); }
+      });
+    }, 50);
+  } else {
+    var opts = q.options.map(function(o,i){
+      return '<button class="opt" onclick="selectOpt('+i+')" id="qopt-'+i+'"><span style="opacity:0.4;margin-right:10px">'+['А','Б','В','Г'][i]+'</span>'+o+'</button>';
+    }).join('');
 
-  document.getElementById('quiz-content').innerHTML =
-    '<div class="quiz-card">' +
-    '<div class="quiz-label">Вопрос ' + (currentQ+1) + ' из ' + mod.quiz.length + '</div>' +
-    '<div class="quiz-q">' + q.q + '</div>' +
-    '<div class="options">' + opts + '</div>' +
-    '<div class="explain" id="quiz-explain">' + q.explain + '</div>' +
-    '</div>';
+    document.getElementById('quiz-content').innerHTML =
+      '<div class="quiz-card">' +
+      '<div class="quiz-label">Вопрос ' + (currentQ+1) + ' из ' + mod.quiz.length + '</div>' +
+      '<div class="quiz-q">' + q.q + '</div>' +
+      '<div class="options">' + opts + '</div>' +
+      '<div class="explain" id="quiz-explain">' + q.explain + '</div>' +
+      '</div>';
+  }
 
   if(currentQ === mod.quiz.length - 1){
     document.getElementById('btn-next-q').textContent = 'Завершить тест ✓';
@@ -2180,6 +2239,52 @@ function showQuiz(){
     document.getElementById('btn-next-q').textContent = 'Следующий →';
   }
   showScreen('quiz');
+}
+
+function escapeHtml(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function submitTextAnswer(){
+  if(quizAnswered) return;
+  var q = modules[currentModule].quiz[currentQ];
+  var input = document.getElementById('qtext-input');
+  var raw = (input && input.value ? input.value : '').trim();
+  if(!raw) return;
+  quizAnswered = true;
+
+  var correct = false;
+  if(q.noScore){
+    correct = true; // открытый ответ — всегда «принят», но не идёт в счёт
+  } else if(q.normalize === 'digits'){
+    var userDigits = raw.replace(/\D+/g, '');
+    correct = userDigits === q.answer;
+  } else {
+    correct = raw.toLowerCase() === String(q.answer || '').toLowerCase();
+  }
+
+  if(correct && !q.noScore) quizScore++;
+
+  input.disabled = true;
+  var submitBtn = document.getElementById('qtext-submit');
+  if(submitBtn) submitBtn.disabled = true;
+  if(q.noScore) input.classList.add('correct');
+  else input.classList.add(correct ? 'correct' : 'wrong');
+
+  document.getElementById('quiz-explain').classList.add('show');
+  document.getElementById('quiz-score').textContent = quizScore;
+  document.getElementById('btn-next-q').classList.add('show');
+
+  quizAnswers.push({
+    q: q.q,
+    correct: correct,
+    right: q.answer || '',
+    type: 'text',
+    userText: raw,
+    noScore: !!q.noScore
+  });
 }
 
 function selectOpt(idx){
@@ -2216,12 +2321,13 @@ function showResult(){
   updateHomeDoneBadges();
 
   var mod = modules[currentModule];
-  var total = mod.quiz.length;
-  var pct = Math.round((quizScore / total) * 100);
+  var scoredAnswers = quizAnswers.filter(function(a){return !a.noScore;});
+  var total = scoredAnswers.length;
+  var pct = total > 0 ? Math.round((quizScore / total) * 100) : 0;
 
   document.getElementById('r-pct').textContent = pct + '%';
   document.getElementById('r-correct').textContent = quizScore;
-  document.getElementById('r-wrong').textContent = total - quizScore;
+  document.getElementById('r-wrong').textContent = Math.max(0, total - quizScore);
   document.getElementById('r-module').textContent = 'Модуль ' + (currentModule+1);
 
   setTimeout(function(){
@@ -2235,10 +2341,28 @@ function showResult(){
   document.getElementById('r-title').textContent = t;
   document.getElementById('r-sub').textContent = s;
 
-  var wrong = quizAnswers.filter(function(a){return !a.correct;});
-  var ok = quizAnswers.filter(function(a){return a.correct;});
-  var sorted = wrong.concat(ok);
+  var textAnswers = quizAnswers.filter(function(a){return a.type === 'text';});
+  var nonText = quizAnswers.filter(function(a){return a.type !== 'text';});
+  var wrong = nonText.filter(function(a){return !a.correct;});
+  var ok = nonText.filter(function(a){return a.correct;});
+  var sorted = textAnswers.concat(wrong).concat(ok);
   document.getElementById('r-breakdown').innerHTML = sorted.map(function(a){
+    if(a.type === 'text'){
+      var status, rowClass;
+      if(a.noScore){ status = '✍️'; rowClass = 'bd-row text'; }
+      else if(a.correct){ status = '✅'; rowClass = 'bd-row text'; }
+      else { status = '❌'; rowClass = 'bd-row text fail'; }
+      var userClass = a.noScore ? '' : (a.correct ? 'ok' : 'fail');
+      var hint = (!a.noScore && !a.correct && a.right)
+        ? '<span class="bd-hint">верно: ' + escapeHtml(a.right) + '</span>'
+        : '';
+      return '<div class="'+rowClass+'"><span>'+status+'</span>' +
+             '<div class="bd-q-block">' +
+             '<div class="bd-q-full">'+escapeHtml(a.q)+'</div>' +
+             '<div class="bd-user '+userClass+'">'+escapeHtml(a.userText)+'</div>' +
+             hint +
+             '</div></div>';
+    }
     return '<div class="bd-row"><span>'+(a.correct?'✅':'❌')+'</span><span class="bd-q">'+a.q.substring(0,55)+'...</span><span class="bd-a '+(a.correct?'ok':'fail')+'">'+(a.correct?'Верно':a.right.substring(0,30))+'</span></div>';
   }).join('');
 
