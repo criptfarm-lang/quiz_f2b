@@ -354,6 +354,71 @@ function showScreen(id){
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo(0,0);
 }
+
+(function attestationGate(){
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('token');
+  var api = (params.get('api') || '').replace(/\/+$/, '');
+  if (!token || !api) return;
+
+  function showBlockedScreen(msg){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+    var d = document.getElementById('screen-blocked');
+    if (!d) {
+      d = document.createElement('div');
+      d.id = 'screen-blocked';
+      d.className = 'screen active';
+      d.innerHTML = '<div class="wrap"><div style="text-align:center;padding:60px 24px;max-width:640px;margin:0 auto;">' +
+        '<h1 style="margin-bottom:18px;font-size:28px">Аттестация недоступна</h1>' +
+        '<p id="blocked-msg" style="color:#aaa;font-size:16px;line-height:1.6"></p>' +
+        '</div></div>';
+      document.body.appendChild(d);
+    } else {
+      d.classList.add('active');
+    }
+    document.getElementById('blocked-msg').textContent = msg;
+  }
+
+  window.restart = function(){
+    showBlockedScreen('Эта ссылка уже использована. Новую открывает собственник.');
+  };
+
+  var origShowResult = window.showResult;
+  window.showResult = function(){
+    origShowResult();
+    try {
+      var pct = Math.round(window.score / window.shuffled.length * 100);
+      fetch(api + '/api/attestation/result', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({token: token, score: pct}),
+      }).catch(function(){});
+    } catch(e) {}
+  };
+
+  fetch(api + '/api/attestation/open', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({token: token}),
+  }).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(j){ return {http: r.status, body: j}; });
+  }).then(function(res){
+    if (res.http === 404) {
+      showBlockedScreen('Ссылка не действительна. Запроси новую у собственника.');
+      return;
+    }
+    var st = res.body && res.body.status;
+    if (st === 'completed') {
+      showBlockedScreen('Аттестация уже сдана в этом раунде. Новая попытка - по команде собственника.');
+    } else if (st === 'expired') {
+      showBlockedScreen('Эта ссылка отменена. Новую открывает собственник.');
+    } else if (st === 'opened' && !res.body.just_opened) {
+      showBlockedScreen('Эта ссылка уже использована. Открыть тест повторно нельзя.');
+    }
+  }).catch(function(){
+    showBlockedScreen('Не удалось проверить ссылку. Проверь интернет и обнови страницу. Если повторится - напиши собственнику.');
+  });
+})();
 </script>
 </body>
 </html>
