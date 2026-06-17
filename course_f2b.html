@@ -124,6 +124,7 @@ h1 span{color:var(--accent)}
 .module-card p{font-size:12px;color:var(--muted);line-height:1.5}
 .module-card .lessons-count{margin-top:12px;font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1px}
 .module-card .done-badge{position:absolute;top:16px;right:16px;background:var(--correct);color:#0a0f1e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+.module-card .new-badge{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#e63946;color:#fff;font-size:12px;font-weight:700;line-height:1;box-shadow:0 0 0 2px rgba(0,0,0,0.4)}
 
 .btn-start{display:block;width:100%;padding:18px;background:var(--accent);color:#0a0f1e;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:var(--r);cursor:pointer;transition:all 0.2s}
 .btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,212,170,0.3)}
@@ -2366,8 +2367,69 @@ function startModule(idx){
   currentQ = 0;
   quizScore = 0;
   quizAnswers = [];
+  markModuleSeen(idx);
   showLesson();
 }
+
+// ─── F2B course-badges (per-manager «что нового») ───────────────────────────
+// Параметры приходят из manager-dashboard ссылки:
+//   ?tag=<manager_tag>&token=<dashboard_token>&api=<api_base>
+// fetch GET api/manager/<tag>/course/modules?token=… → {m1:N, m2:N, ...}
+// При клике на module-card → POST api/manager/<tag>/course/module/m<N+1>/seen
+// На GitHub Pages CORS-настройка в quiz-game разрешает этот origin.
+const __courseCtx = (function(){
+  try {
+    const q = new URLSearchParams(location.search);
+    const tag = q.get('tag');
+    const token = q.get('token');
+    const api = (q.get('api') || '').replace(/\/$/, '');
+    if (tag && token && api) return {tag, token, api};
+  } catch(e){}
+  return null;
+})();
+
+async function loadCourseBadges(){
+  if (!__courseCtx) return;
+  try {
+    const r = await fetch(`${__courseCtx.api}/manager/${__courseCtx.tag}/course/modules?token=${encodeURIComponent(__courseCtx.token)}`, {cache:'no-store'});
+    if (!r.ok) return;
+    const data = await r.json();
+    document.querySelectorAll('.module-card').forEach((card, idx) => {
+      const moduleId = 'm' + (idx + 1);
+      const n = data[moduleId] || 0;
+      let badge = card.querySelector('.new-badge');
+      if (n > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'new-badge';
+          card.appendChild(badge);
+        }
+        badge.textContent = String(n);
+      } else if (badge) {
+        badge.remove();
+      }
+    });
+  } catch(e){}
+}
+
+async function markModuleSeen(idx){
+  if (!__courseCtx) return;
+  const moduleId = 'm' + (idx + 1);
+  // Локально мгновенно прячем бейдж
+  const cards = document.querySelectorAll('.module-card');
+  const card = cards[idx];
+  if (card) {
+    const badge = card.querySelector('.new-badge');
+    if (badge) badge.remove();
+  }
+  try {
+    await fetch(`${__courseCtx.api}/manager/${__courseCtx.tag}/course/module/${moduleId}/seen?token=${encodeURIComponent(__courseCtx.token)}`, {
+      method:'POST', cache:'no-store',
+    });
+  } catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded', loadCourseBadges);
 
 function prevStep(){
   if(currentStep > 0){
