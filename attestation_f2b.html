@@ -214,8 +214,6 @@ var timeLeft = 2400;
 var timeSpent = 0;
 var timerStartTime = null;
 var timerStartLeft = 2400;
-var timerStartTime = null;
-var timerStartLeft = 2400;
 
 function shuffle(arr){
   for(var i=arr.length-1;i>0;i--){
@@ -227,7 +225,7 @@ function shuffle(arr){
 
 function startQuiz(){
   shuffled = shuffle([...allQ]);
-  current = 0; score = 0; answers = []; timeLeft = 900; timeSpent = 0;
+  current = 0; score = 0; answers = []; timeLeft = 2400; timeSpent = 0;
   document.getElementById('score').textContent = 0;
   showQ();
   showScreen('quiz');
@@ -241,7 +239,7 @@ function startTimer(){
   timerInterval = setInterval(function(){
     var elapsed = Math.floor((Date.now() - timerStartTime) / 1000);
     timeLeft = timerStartLeft - elapsed;
-    timeSpent = 3000 - timeLeft;
+    timeSpent = 2400 - timeLeft;
     if(timeLeft < 0) timeLeft = 0;
     var m = Math.floor(timeLeft/60);
     var s = timeLeft%60;
